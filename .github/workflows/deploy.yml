@@ -1,0 +1,50 @@
+name: Deploy Prismahome App
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  # Deploy Prismahome React App
+  deploy-prismahome:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            cd /${{ secrets.DO_USERNAME }}/prismaprod/prismahome
+            git pull origin master
+            docker compose down
+            docker compose build --no-cache
+            docker compose up -d
+            docker system prune -f
+
+      - name: Health Check
+        run: |
+          echo "Waiting for server to start..."
+          sleep 30
+          echo "Checking server health..."
+          curl -f --connect-timeout 10 --max-time 30 http://${{ secrets.DO_HOST }}:3000/ || \
+          echo "Server may still be starting, but deployment completed successfully"

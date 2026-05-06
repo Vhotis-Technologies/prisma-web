@@ -1,0 +1,16 @@
+services:
+  prismahome:
+    build: .
+    container_name: prismahome
+    ports:
+      - "3000:3000"
+    networks:
+      - prisma_shared_net
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+
+networks:
+  prisma_shared_net:
+    external: true
