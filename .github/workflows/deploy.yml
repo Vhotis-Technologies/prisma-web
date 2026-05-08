@@ -2,12 +2,12 @@ name: Deploy Prismahome App
 
 on:
   push:
-    branches: [master]
+    branches: [master, staging]
 
 jobs:
   # Deploy Prismahome React App
   deploy-prismahome:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
 
     steps:
