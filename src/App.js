@@ -1203,40 +1203,49 @@ function App() {
 
   const packages = {
     basic: {
-      title: "The Quick Sparkle",
+      title: "Prisma Quick Sparkle",
       description:
         "Essential cleaning for routine maintenance. Perfect for regular upkeep.",
       image: cleaning,
       interior: [],
       exterior: [
-        "Exterior Wash and Dry (NoH20, Hand Wash, Steam wash)",
+        "Exterior Wash and Dry (Hand Wash, Steam wash)",
         "Clean Wheels, Tires, and  Arches",
         "Exterior Windows Cleaned",
+        "Interior Windows Cleaned",
+        "Quick Interior Vacuum",
+        "Boot and Trunk Vacuumed",
       ],
       duration: "45-60 minutes",
-      price: "€35",
+      price: "€50",
     },
     mini: {
-      title: "The Daily Refresh",
+      title: "Prisma Refresh",
       description:
         "Enhanced cleaning with protective treatments. Great for monthly maintenance.",
       image: tireCleaning,
       interior: [
-        "Full Interior Vacuum",
-        "Interior Glass Cleaning",
-        "Dashboard & Console Wipe",
+        "Everything in the Quick Sparkle",
+        "Deep Carpet & Upholstery Cleaning",
+        "Leather Cleaning & Conditioning",
+        "Dashboard & Console Wipe Down",
+        "Trunk & Door Jambs Cleaned",
+        "Interior Glass Polish",
+        "Interior Protection Application",
       ],
       exterior: [
-        "Exterior Wash and Dry (NoH20, Hand Wash, Steam wash)",
+        "Exterior Wash and Dry (Hand Wash, Steam wash)",
         "Clean Wheels, Tires, and  Arches",
         "Exterior Windows Cleaned",
         "Door sills and Lamps Cleaned",
+        "Sealant or Wax Application",
+        "Signature hot air drying"
       ],
-      duration: "1 hour-1.5 hours",
-      price: "€70",
+      duration: "3 hours",
+      price: "€100",
     },
     interior: {
-      title: "Interior Sanctuary",
+      title: "Prisma Interior Sanctuary",
       description:
         "Deep interior cleaning and restoration. Perfect for addressing stains and odors.",
       image: interiorCleaning,
@@ -1250,62 +1259,68 @@ function App() {
         "Trunk & Door Jambs Detail",
       ],
       exterior: [""],
-      duration: "2-3 hours",
-      price: "€120",
+      duration: "3 hours",
+      price: "€150",
     },
     full: {
-      title: "The Showroom Shine",
+      title: "Prisma Showroom Shine",
       badge: "Most Popular",
       description:
         "Comprehensive inside-out detailing. Complete vehicle restoration.",
       image: heroImage,
       interior: [
+        "Everything in Prisma Refresh",
         "Deep Carpet & Upholstery Cleaning",
-        "Leather Conditioning",
-        "Dashboard & Console Detail",
-        "Interior Protection Treatment",
-        "Odor Elimination",
-        "Trunk & Door Jambs Detail",
+        "Leather Cleaning & Conditioning",
+        "Dashboard & Console Wipe Down",
+        "Trunk & Door Jambs Cleaned",
         "Interior Glass Polish",
+        "Interior Protection Application",
       ],
       exterior: [
+        "Everything in Prisma Refresh",
         "Hand Wash & Clay Bar Treatment",
-        "Paint Polishing",
+        "One stage paint correction",
         "Wheel & Tire Deep Clean",
         "Tire Dressing",
-        "Exterior Glass Polish",
+        "Exterior Glass Polishing",
         "Trim & Plastic Restoration",
         "Tar and Gravel Removal",
+        "Sealant or Wax Application",
+        "Signature hot air drying"
       ],
-      duration: "3-4 hours",
-      price: "€180",
+      duration: "5 hours",
+      price: "€250",
     },
     premium: {
-      title: "The Ultimate Prestige",
+      title: "Prisma Ultimate Prestige",
       badge: "VIP",
       description:
         "Ultimate detailing experience with advanced treatments and protection.",
       image: carPolishing,
       interior: [
+        "Everything in Prisma Showroom Shine",
         "Advanced Stain Removal",
         "Professional Carpet Extraction",
-        "Premium Leather Treatment",
-        "Interior Ceramic Coating",
-        "Comprehensive Odor Removal",
-        "Headliner Cleaning",
-        "Interior Detailing & Protection",
+        "Leather Cleaning & Conditioning",
+        "Dashboard & Console Wipe Down",
+        "Trunk & Door Jambs Cleaned",
+        "Interior Glass Polishing",
+        "Interior Protection Application",
       ],
       exterior: [
-        "Single Stage Paint Correction",
-        "Clay Bar Treatment",
-        "Application of Wax/Sealant",
-        "Engine Bay Cleaning & Dressing",
-        "Complete Exterior Protection",
-        "Tar and Gravel Removal",
-        "Exterior Glass Polish",
+        "Everything in Prisma Showroom Shine",
+        "Hand Wash & Clay Bar Treatment",
+        "Two stage paint correction",
+        "Wheel & Tire Deep Clean",
+        "Tire Dressing",
+        "Exterior Glass Polishing",
         "Trim & Plastic Restoration",
+        "Tar and Gravel Removal",
+        "Sealant or Wax Application",
+        "Signature hot air drying"
       ],
-      duration: "6-7 hours",
+      duration: "6 hours",
       price: "€500",
     },
   };
@@ -1552,31 +1567,31 @@ function App() {
               active={activePackage === "basic"}
               onClick={() => setActivePackage("basic")}
             >
-              The Quick Sparkle
+              Prisma Quick Sparkle
             </TabButton>
             <TabButton
               active={activePackage === "mini"}
               onClick={() => setActivePackage("mini")}
             >
-              The Daily Refresh
+              Prisma Refresh
             </TabButton>
             <TabButton
               active={activePackage === "interior"}
               onClick={() => setActivePackage("interior")}
             >
-              Interior Sanctuary
+              Prisma Interior Sanctuary
             </TabButton>
             <TabButton
               active={activePackage === "full"}
               onClick={() => setActivePackage("full")}
             >
-              The Showroom Shine
+              Prisma Showroom Shine
             </TabButton>
             <TabButton
               active={activePackage === "premium"}
               onClick={() => setActivePackage("premium")}
             >
-              The Ultimate Prestige
+              Prisma Ultimate Prestige
             </TabButton>
           </PackageTabs>
 
