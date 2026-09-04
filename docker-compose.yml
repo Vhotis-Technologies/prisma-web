@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        REACT_APP_CLIENT_WEB_URL: ${REACT_APP_CLIENT_WEB_URL:-https://app.prismavalet.com}
+        REACT_APP_CLIENT_WEB_URL: ${REACT_APP_CLIENT_WEB_URL:-https://staging.app.prismavalet.com}
     container_name: prismahome
     ports:
       - "3000:3000"
@@ -12,7 +12,6 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
-
 
 networks:
   prisma_shared_net:

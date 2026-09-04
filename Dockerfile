@@ -3,9 +3,9 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm ci
 COPY . .
-ARG REACT_APP_CLIENT_WEB_URL=https://app.prismavalet.com
+ARG REACT_APP_CLIENT_WEB_URL=https://staging.app.prismavalet.com
 ENV REACT_APP_CLIENT_WEB_URL=$REACT_APP_CLIENT_WEB_URL
 RUN npm run build
 
@@ -13,7 +13,7 @@ RUN npm run build
 FROM node:18-alpine AS production
 
 WORKDIR /app
-RUN npm install -g serve --silent
+RUN npm install -g serve
 COPY --from=builder /app/build ./build
 
 EXPOSE 3000
