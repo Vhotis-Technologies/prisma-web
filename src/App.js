@@ -24,6 +24,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import TermsOfService from "./components/TermsOfService";
 import CookieConsent from "./components/CookieConsent";
 import CookieDemo from "./components/CookieDemo";
+import { loginUrl, welcomeUrl } from "./config";
 
 // Import local images
 import heroImage from "./nice car.jpg";
@@ -64,7 +65,41 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 3rem;
+  flex-wrap: wrap;
+`;
+
+const HeaderNav = styled.nav`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const HeaderLink = styled.a`
+  color: ${PRISMA_PRIMARY};
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const HeaderCta = styled.a`
+  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+
+  &:hover {
+    filter: brightness(1.08);
+    color: white;
+  }
 `;
 
 const Logo = styled.h1`
@@ -182,7 +217,7 @@ const CTAButtons = styled.div`
   }
 `;
 
-const PrimaryButton = styled(motion.button)`
+const PrimaryButton = styled(motion.a)`
   background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
   color: white;
   border: none;
@@ -192,19 +227,22 @@ const PrimaryButton = styled(motion.button)`
   font-weight: 600;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.2rem;
-  min-width: 120px;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 160px;
+  text-decoration: none;
   box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
 
   &:hover {
     filter: brightness(1.08);
     box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+    color: white;
   }
 `;
 
-const SecondaryButton = styled(motion.button)`
+const SecondaryButton = styled(motion.a)`
   background: ${PRISMA_PRIMARY_PALE};
   color: ${PRISMA_PRIMARY};
   border: 2px solid ${PRISMA_PRIMARY_LIGHT};
@@ -214,14 +252,17 @@ const SecondaryButton = styled(motion.button)`
   font-weight: 600;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.2rem;
-  min-width: 120px;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 160px;
+  text-decoration: none;
 
   &:hover {
     background: #ddd6fe;
     border-color: ${PRISMA_PRIMARY};
+    color: ${PRISMA_PRIMARY};
   }
 `;
 
@@ -1006,7 +1047,7 @@ const FooterGrid = styled.div`
   margin: 0 auto;
   padding: 0 20px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
   gap: 2.5rem;
   padding-bottom: 2.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1152,7 +1193,7 @@ function App() {
     {
       question: "How do I book a service?",
       answer:
-        "Services can only be booked through our mobile app which is available on the App Store and Google Play. We do not currently accept bookings over the phone.",
+        "Book on the web at app.prismavalet.com or in the Prisma Car Care app on the App Store and Google Play. On the web you can create an account or book as a guest. We do not currently accept bookings over the phone.",
     },
     {
       question: "Can you detail my car at my home, office or apartment?",
@@ -1332,6 +1373,10 @@ function App() {
         <Container>
           <Header>
             <Logo>PRISMA CAR CARE</Logo>
+            <HeaderNav>
+              <HeaderLink href={loginUrl}>Log in</HeaderLink>
+              <HeaderCta href={welcomeUrl}>Get started</HeaderCta>
+            </HeaderNav>
           </Header>
           <HeroContent>
             <motion.div
@@ -1375,26 +1420,24 @@ function App() {
 
             <CTAButtons>
               <PrimaryButton
+                href={welcomeUrl}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <FaDownload />
-                <span>Download for</span>
-                <span>iOS</span>
+                Get started
               </PrimaryButton>
               <SecondaryButton
+                href={loginUrl}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <FaDownload />
-                <span>Download for</span>
-                <span>Android</span>
+                Log in
               </SecondaryButton>
             </CTAButtons>
           </HeroContent>
@@ -1843,7 +1886,7 @@ function App() {
             >
               <MobileTitle>Simple Booking, Maximum Flexibility</MobileTitle>
               <MobileSubtitle>
-                Download the app to book anytime, reschedule when needed, and get the same premium service whether you're one car or a full fleet.
+                Book on the web or download the app to schedule anytime, reschedule when needed, and get the same premium service whether you're one car or a full fleet.
               </MobileSubtitle>
             </motion.div>
 
@@ -1856,10 +1899,14 @@ function App() {
               <MobileIcon>
                 <FaDownload />
               </MobileIcon>
-              <MobileTitle>Download the app to get started</MobileTitle>
+              <MobileTitle>Get started on the web or in the app</MobileTitle>
               <MobileSubtitle>
-                Have any questions? Email for help
+                Create an account, book as a guest, or email us if you have questions.
               </MobileSubtitle>
+              <CTAButtons style={{ marginTop: "1.25rem" }}>
+                <PrimaryButton href={welcomeUrl}>Get started</PrimaryButton>
+                <SecondaryButton href={loginUrl}>Log in</SecondaryButton>
+              </CTAButtons>
               <PhoneNumber href="mailto:support@prismavalet.com">
                 support@prismavalet.com
               </PhoneNumber>
@@ -1980,9 +2027,16 @@ function App() {
           <FooterBrand>
             <div className="footer-logo">Prisma Car Care</div>
             <p className="footer-tagline">
-              Premium mobile detailing at your place or ours. Book via app—simple, flexible, five-star service.
+              Premium mobile detailing at your place or ours. Book on the web or in the app—simple, flexible, five-star service.
             </p>
           </FooterBrand>
+          <FooterColumn>
+            <FooterHeading>Account</FooterHeading>
+            <FooterLinks>
+              <li><a href={welcomeUrl}>Get started</a></li>
+              <li><a href={loginUrl}>Log in</a></li>
+            </FooterLinks>
+          </FooterColumn>
           <FooterColumn>
             <FooterHeading>Legal</FooterHeading>
             <FooterLinks>

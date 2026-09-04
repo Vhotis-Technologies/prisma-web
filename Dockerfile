@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --silent
 COPY . .
+ARG REACT_APP_CLIENT_WEB_URL=https://app.prismavalet.com
+ENV REACT_APP_CLIENT_WEB_URL=$REACT_APP_CLIENT_WEB_URL
 RUN npm run build
 
 # Production stage - much smaller

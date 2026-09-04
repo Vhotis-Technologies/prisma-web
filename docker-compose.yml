@@ -1,6 +1,9 @@
 services:
   prismahome:
-    build: .
+    build:
+      context: .
+      args:
+        REACT_APP_CLIENT_WEB_URL: ${REACT_APP_CLIENT_WEB_URL:-https://app.prismavalet.com}
     container_name: prismahome
     ports:
       - "3000:3000"
