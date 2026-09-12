@@ -1387,7 +1387,6 @@ function App() {
               <HeroTitle>We Make It Shine</HeroTitle>
               <HeroSubtitle>
                 Get Your Services Delivered To You Anywhere At Your Convenience
-                <FaHeart style={{ color: "#ff6b35", marginLeft: "0.5rem" }} />
               </HeroSubtitle>
               <HeroTagline>
                 Premium mobile detailing with flexible scheduling, fleet & partnership programs, and clear documentation—so you can book in seconds and keep every vehicle at its best.

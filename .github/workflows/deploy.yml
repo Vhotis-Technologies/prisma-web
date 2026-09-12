@@ -34,7 +34,7 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
-            cd /${{ secrets.DO_USERNAME }}/prisma-prod/prisma-web
+            cd /${{ secrets.DO_USERNAME }}/production/prisma-web
             git pull origin master
             docker compose down
             docker compose build --no-cache
