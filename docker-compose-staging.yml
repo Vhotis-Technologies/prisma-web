@@ -1,0 +1,18 @@
+services:
+  prismahome:
+    build:
+      context: .
+      args:
+        REACT_APP_CLIENT_WEB_URL: ${REACT_APP_CLIENT_WEB_URL:-https://staging.app.prismavalet.com}
+    container_name: prismahome_staging
+    ports:
+      - "3100:3000"
+    networks:
+      - prisma_shared_net
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+networks:
+  prisma_shared_net:
+    external: true

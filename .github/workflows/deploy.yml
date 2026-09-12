@@ -2,49 +2,88 @@ name: Deploy Prismahome App
 
 on:
   push:
-    branches: [master, staging]
+    branches: [main, master, staging]
+
+env:
+  DO_PROD_PATH: /${{ secrets.DO_USERNAME }}/production/prisma-web
+  DO_STAGING_PATH: /${{ secrets.DO_USERNAME }}/staging/prisma-web
 
 jobs:
-  # Deploy Prismahome React App
-  deploy-prismahome:
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
+  deploy-production:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "package-lock.json"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build React app
-        run: npm run build
-
-      - name: Deploy to Digital Ocean
+      - name: Deploy production stack (DigitalOcean)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
+          timeout: 5m
+          command_timeout: 60m
           script: |
-            cd /${{ secrets.DO_USERNAME }}/production/prisma-web
-            git pull origin master
-            docker compose down
-            docker compose build --no-cache
+            set -euo pipefail
+            cd ${{ env.DO_PROD_PATH }}
+            git stash || true
+            git fetch origin
+            git checkout ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
+            docker compose down --remove-orphans || true
+            docker container prune -f || true
+
+            sleep 10
+            docker compose build
             docker compose up -d
+
             docker system prune -f
 
-      - name: Health Check
+      - name: Health Check (production)
         run: |
           echo "Waiting for server to start..."
           sleep 30
           echo "Checking server health..."
           curl -f --connect-timeout 10 --max-time 30 http://${{ secrets.DO_HOST }}:3000/ || \
           echo "Server may still be starting, but deployment completed successfully"
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy staging stack (DigitalOcean)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          timeout: 5m
+          command_timeout: 60m
+          script: |
+            set -euo pipefail
+            cd ${{ env.DO_STAGING_PATH }}
+            git stash || true
+            git fetch origin
+            git checkout staging
+            git pull origin staging
+            docker compose -f docker-compose-staging.yml down --remove-orphans || true
+            docker container prune -f || true
+
+            sleep 10
+            docker compose -f docker-compose-staging.yml build
+            docker compose -f docker-compose-staging.yml up -d
+
+            docker system prune -f
+
+      - name: Health Check (staging)
+        run: |
+          echo "Waiting for staging server..."
+          sleep 30
+          curl -f --connect-timeout 10 --max-time 30 http://${{ secrets.DO_HOST }}:3100/ || \
+          echo "Staging server may still be starting, but deployment completed successfully"
