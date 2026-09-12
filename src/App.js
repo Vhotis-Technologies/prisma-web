@@ -11,7 +11,6 @@ import {
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaHeart,
   FaHandshake,
   FaFileAlt,
   FaCogs,
