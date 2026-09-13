@@ -1,112 +1,161 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaLock, FaChartLine, FaSlidersH, FaBullhorn } from "react-icons/fa";
+import {
+  applyConsentPreferences,
+  getCookiePreferences,
+  DEFAULT_PREFERENCES,
+} from "../utils/cookieUtils";
+import { initAnalytics, disableAnalytics } from "../lib/firebase";
 
-const SettingsModal = styled(motion.div)`
+const PRISMA_PRIMARY = "#7c3aed";
+const PRISMA_PRIMARY_LIGHT = "#8b5cf6";
+const PRISMA_PRIMARY_PALE = "#ede9fe";
+const PRISMA_GRADIENT = "linear-gradient(135deg, #667eea, #764ba2)";
+const TEXT_DARK = "#1a1a1a";
+const TEXT_MUTED = "#6b7280";
+
+const Overlay = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  z-index: 1200;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  z-index: 1001;
-  padding: 2rem;
+  padding: 1rem;
+
+  @media (min-width: 640px) {
+    align-items: center;
+    padding: 1.5rem;
+  }
 `;
 
-const ModalContent = styled(motion.div)`
-  background: white;
-  border-radius: 12px;
-  max-width: 600px;
+const SettingsCard = styled(motion.div)`
   width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-width: 520px;
+  max-height: min(88vh, 680px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid ${PRISMA_PRIMARY_PALE};
+  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.2);
 `;
 
-const ModalHeader = styled.div`
-  padding: 2rem 2rem 1.5rem 2rem;
-  border-bottom: 1px solid #f3f4f6;
+const AccentBar = styled.div`
+  height: 4px;
+  background: ${PRISMA_GRADIENT};
+`;
+
+const SettingsHeader = styled.div`
+  padding: 1.5rem 1.5rem 1.1rem;
+  border-bottom: 1px solid #f3f0ff;
 
   h2 {
-    margin: 0 0 0.5rem 0;
-    color: #1f2937;
-    font-size: 1.5rem;
-    font-weight: 600;
+    margin: 0 0 0.4rem;
+    color: ${TEXT_DARK};
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   p {
     margin: 0;
-    color: #6b7280;
-    font-size: 0.95rem;
+    color: ${TEXT_MUTED};
+    font-size: 0.9rem;
     line-height: 1.5;
   }
 
-  .learn-more {
-    color: #10b981;
+  a {
+    color: ${PRISMA_PRIMARY};
+    font-weight: 600;
     text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
 
     &:hover {
-      color: #059669;
+      text-decoration: underline;
     }
   }
 `;
 
-const ModalBody = styled.div`
-  padding: 2rem;
+const SettingsBody = styled.div`
+  padding: 0.5rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
 `;
 
-const CookieCategory = styled.div`
+const CategoryRow = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  gap: 1rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid #f3f0ff;
 
   &:last-child {
     border-bottom: none;
   }
+`;
 
-  .category-info {
-    flex: 1;
-    margin-right: 1rem;
-  }
+const CategoryInfo = styled.div`
+  display: flex;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+`;
 
+const CategoryIcon = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: ${PRISMA_PRIMARY_PALE};
+  color: ${PRISMA_PRIMARY};
+  font-size: 0.9rem;
+`;
+
+const CategoryText = styled.div`
   h3 {
-    margin: 0 0 0.5rem 0;
-    color: #1f2937;
-    font-size: 1rem;
+    margin: 0 0 0.3rem;
+    color: ${TEXT_DARK};
+    font-size: 0.98rem;
     font-weight: 600;
   }
 
   p {
     margin: 0;
-    color: #6b7280;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    color: ${TEXT_MUTED};
+    font-size: 0.85rem;
+    line-height: 1.45;
   }
 `;
 
-const LockIndicator = styled.div`
-  display: flex;
+const AlwaysOn = styled.span`
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 24px;
-  background: #f3f4f6;
-  border-radius: 12px;
-  color: #6b7280;
-  font-size: 0.8rem;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: ${PRISMA_PRIMARY_PALE};
+  color: ${PRISMA_PRIMARY};
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
 `;
 
-const ToggleSwitch = styled.label`
+const Toggle = styled.label`
   position: relative;
   display: inline-block;
-  width: 44px;
-  height: 24px;
+  width: 48px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
 
   input {
     opacity: 0;
@@ -116,235 +165,245 @@ const ToggleSwitch = styled.label`
 
   .slider {
     position: absolute;
+    inset: 0;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e5e7eb;
-    transition: 0.3s;
-    border-radius: 24px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    transition: 0.2s ease;
 
     &:before {
-      position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
+      position: absolute;
+      height: 22px;
+      width: 22px;
       left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.3s;
+      top: 3px;
+      background: #fff;
       border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      transition: 0.2s ease;
     }
   }
 
   input:checked + .slider {
-    background-color: #10b981;
+    background: ${PRISMA_PRIMARY_LIGHT};
   }
 
   input:checked + .slider:before {
     transform: translateX(20px);
   }
-
-  input:disabled + .slider {
-    background-color: #e5e7eb;
-    cursor: not-allowed;
-  }
 `;
 
-const ModalFooter = styled.div`
-  padding: 1.5rem 2rem 2rem 2rem;
-  border-top: 1px solid #f3f4f6;
+const SettingsFooter = styled.div`
+  padding: 1.15rem 1.5rem 1.5rem;
+  border-top: 1px solid #f3f0ff;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+  }
 `;
 
-const AcceptAllButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: #10b981;
-  color: white;
+const PrimaryButton = styled(motion.button)`
+  flex: 1;
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
   font-size: 0.95rem;
+  color: #fff;
+  background: ${PRISMA_GRADIENT};
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
 
   &:hover {
-    background: #059669;
+    filter: brightness(1.06);
   }
 `;
 
-const SaveSettingsButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: white;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-weight: 600;
+const OutlineButton = styled(motion.button)`
+  flex: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
   font-size: 0.95rem;
+  color: ${TEXT_DARK};
+  background: #fff;
+  border: 1px solid #e5e7eb;
 
   &:hover {
-    background: #f9fafb;
+    background: #fafafa;
   }
 `;
 
+const CATEGORIES = [
+  {
+    key: "essential",
+    title: "Strictly necessary",
+    description:
+      "Required for security, navigation, and remembering your cookie choices. Always on.",
+    icon: FaLock,
+    locked: true,
+  },
+  {
+    key: "analytics",
+    title: "Analytics",
+    description:
+      "Helps us understand how visitors use Prisma via Google Analytics (Firebase). No ads.",
+    icon: FaChartLine,
+    locked: false,
+  },
+  {
+    key: "functional",
+    title: "Preferences",
+    description:
+      "Remembers choices that make the site feel more personal, such as display preferences.",
+    icon: FaSlidersH,
+    locked: false,
+  },
+  {
+    key: "marketing",
+    title: "Marketing",
+    description:
+      "Optional cookies for future campaigns and measuring promotional content. Off by default.",
+    icon: FaBullhorn,
+    locked: false,
+  },
+];
+
+/**
+ * Cookie preferences modal (Privacy Policy / footer).
+ * Shares the same consent + Firebase analytics pipeline as the banner.
+ */
 const CookieSettings = ({ isOpen, onClose }) => {
-  const [cookiePreferences, setCookiePreferences] = useState({
-    essential: true, // Always enabled
-    analytics: false,
-    marketing: false,
-    functional: false,
-  });
+  const [preferences, setPreferences] = useState(DEFAULT_PREFERENCES);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      // Load existing preferences
-      const consent = localStorage.getItem("cookie-consent");
-      if (consent) {
-        const preferences = JSON.parse(consent);
-        setCookiePreferences(preferences);
-      }
+      setPreferences(getCookiePreferences());
     }
   }, [isOpen]);
 
-  const savePreferences = (preferences) => {
-    localStorage.setItem("cookie-consent", JSON.stringify(preferences));
-    setCookiePreferences(preferences);
-    onClose();
+  const persist = useCallback(
+    async (next) => {
+      setSaving(true);
+      try {
+        await applyConsentPreferences(next, {
+          initAnalytics,
+          disableAnalytics,
+        });
+        onClose?.();
+      } finally {
+        setSaving(false);
+      }
+    },
+    [onClose]
+  );
 
-    // Here you would typically initialize analytics or other tracking based on preferences
-    if (preferences.analytics) {
-      console.log("Analytics cookies enabled");
-    }
+  const acceptAll = () =>
+    persist({
+      essential: true,
+      analytics: true,
+      functional: true,
+      marketing: true,
+    });
 
-    if (preferences.marketing) {
-      console.log("Marketing cookies enabled");
-    }
+  const saveCustom = () => persist(preferences);
 
-    if (preferences.functional) {
-      console.log("Functional cookies enabled");
-    }
+  const toggleCategory = (key) => {
+    if (key === "essential") return;
+    setPreferences((prev) => ({ ...prev, [key]: !prev[key] }));
   };
-
-  const saveCustomPreferences = () => {
-    savePreferences(cookiePreferences);
-  };
-
-  const handlePreferenceChange = (category) => {
-    if (category === "essential") return; // Essential cookies cannot be disabled
-
-    setCookiePreferences((prev) => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
-  };
-
-  if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <SettingsModal
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
-        <ModalContent
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          onClick={(e) => e.stopPropagation()}
+      {isOpen && (
+        <Overlay
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
         >
-          <ModalHeader>
-            <h2>Cookie settings</h2>
-            <p>
-              We use cookies, some of them are essential, others are optional.{" "}
-              <span className="learn-more">Learn more</span>
-            </p>
-          </ModalHeader>
+          <SettingsCard
+            initial={{ y: 24, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 24, opacity: 0, scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 340, damping: 30 }}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cookie-settings-modal-title"
+          >
+            <AccentBar />
+            <SettingsHeader>
+              <h2 id="cookie-settings-modal-title">Cookie settings</h2>
+              <p>
+                Choose which optional cookies Prisma may use. Essential cookies
+                stay on so the site works.{" "}
+                <a href="/privacy-policy">Learn more</a>
+              </p>
+            </SettingsHeader>
 
-          <ModalBody>
-            <CookieCategory>
-              <div className="category-info">
-                <h3>Strictly Necessary</h3>
-                <p>
-                  These cookies are necessary for the website and can't be
-                  deactivated.
-                </p>
-              </div>
-              <LockIndicator>🔒</LockIndicator>
-            </CookieCategory>
+            <SettingsBody>
+              {CATEGORIES.map(
+                ({ key, title, description, icon: Icon, locked }) => (
+                  <CategoryRow key={key}>
+                    <CategoryInfo>
+                      <CategoryIcon>
+                        <Icon />
+                      </CategoryIcon>
+                      <CategoryText>
+                        <h3>{title}</h3>
+                        <p>{description}</p>
+                      </CategoryText>
+                    </CategoryInfo>
+                    {locked ? (
+                      <AlwaysOn>
+                        <FaLock aria-hidden /> Always on
+                      </AlwaysOn>
+                    ) : (
+                      <Toggle>
+                        <input
+                          type="checkbox"
+                          checked={!!preferences[key]}
+                          onChange={() => toggleCategory(key)}
+                          aria-label={`Enable ${title} cookies`}
+                        />
+                        <span className="slider" />
+                      </Toggle>
+                    )}
+                  </CategoryRow>
+                )
+              )}
+            </SettingsBody>
 
-            <CookieCategory>
-              <div className="category-info">
-                <h3>Marketing & Analytics</h3>
-                <p>
-                  These cookies can be set by our advertising partners through
-                  our website.
-                </p>
-              </div>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={cookiePreferences.marketing}
-                  onChange={() => handlePreferenceChange("marketing")}
-                />
-                <span className="slider"></span>
-              </ToggleSwitch>
-            </CookieCategory>
-
-            <CookieCategory>
-              <div className="category-info">
-                <h3>Preferences</h3>
-                <p>
-                  To individualize your content, we use tools that personalize
-                  your web experience.
-                </p>
-              </div>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={cookiePreferences.functional}
-                  onChange={() => handlePreferenceChange("functional")}
-                />
-                <span className="slider"></span>
-              </ToggleSwitch>
-            </CookieCategory>
-          </ModalBody>
-
-          <ModalFooter>
-            <AcceptAllButton
-              onClick={() => {
-                const allAccepted = {
-                  essential: true,
-                  analytics: true,
-                  marketing: true,
-                  functional: true,
-                };
-                savePreferences(allAccepted);
-              }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Accept all cookies
-            </AcceptAllButton>
-            <SaveSettingsButton
-              onClick={saveCustomPreferences}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Save settings
-            </SaveSettingsButton>
-          </ModalFooter>
-        </ModalContent>
-      </SettingsModal>
+            <SettingsFooter>
+              <PrimaryButton
+                type="button"
+                disabled={saving}
+                onClick={acceptAll}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                Accept all
+              </PrimaryButton>
+              <OutlineButton
+                type="button"
+                disabled={saving}
+                onClick={saveCustom}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                Save preferences
+              </OutlineButton>
+            </SettingsFooter>
+          </SettingsCard>
+        </Overlay>
+      )}
     </AnimatePresence>
   );
 };

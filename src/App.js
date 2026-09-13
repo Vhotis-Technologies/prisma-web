@@ -21,9 +21,13 @@ import "./App.css";
 import PaymentReturn from "./components/PaymentReturn";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import TermsOfService from "./components/TermsOfService";
-import CookieConsent from "./components/CookieConsent";
+import CookieConsent, {
+  OPEN_COOKIE_SETTINGS_EVENT,
+} from "./components/CookieConsent";
 import CookieDemo from "./components/CookieDemo";
 import { loginUrl, welcomeUrl } from "./config";
+import { hasConsentForCategory } from "./utils/cookieUtils";
+import { initAnalytics } from "./lib/firebase";
 
 // Import local images
 import heroImage from "./nice car.jpg";
@@ -1165,21 +1169,48 @@ function App() {
     }
   }, []);
 
-  // Route rendering
+  // Resume Firebase Analytics when the visitor already consented
+  useEffect(() => {
+    if (hasConsentForCategory("analytics")) {
+      initAnalytics();
+    }
+  }, []);
+
+  // Route rendering — CookieConsent stays mounted on every page
   if (currentRoute === "payment-return") {
-    return <PaymentReturn />;
+    return (
+      <>
+        <PaymentReturn />
+        <CookieConsent />
+      </>
+    );
   }
 
   if (currentRoute === "privacy-policy") {
-    return <PrivacyPolicy />;
+    return (
+      <>
+        <PrivacyPolicy />
+        <CookieConsent />
+      </>
+    );
   }
 
   if (currentRoute === "terms-of-service") {
-    return <TermsOfService />;
+    return (
+      <>
+        <TermsOfService />
+        <CookieConsent />
+      </>
+    );
   }
 
   if (currentRoute === "cookie-demo") {
-    return <CookieDemo />;
+    return (
+      <>
+        <CookieDemo />
+        <CookieConsent />
+      </>
+    );
   }
 
   const carImages = [
@@ -2040,7 +2071,19 @@ function App() {
             <FooterLinks>
               <li><a href="/terms-of-service">Terms of Service</a></li>
               <li><a href="/privacy-policy">Privacy Policy</a></li>
-              <li><a href="/cookie-demo">Cookie Preferences</a></li>
+              <li>
+                <a
+                  href="#cookie-settings"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(
+                      new Event(OPEN_COOKIE_SETTINGS_EVENT)
+                    );
+                  }}
+                >
+                  Cookie Preferences
+                </a>
+              </li>
             </FooterLinks>
           </FooterColumn>
           <FooterColumn>

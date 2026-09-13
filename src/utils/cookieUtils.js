@@ -43,7 +43,9 @@ export const setCookie = (name, value, options = {}) => {
 };
 
 /**
- * Get a cookie value by name
+ * Takes a param of name which is the name of the cookie to check for.
+ * Then checks through all the cookies using a loop, and then returns the value of the cookie if it is found.
+ * else it would return a null value.
  * @param {string} name - Cookie name
  * @returns {string|null} - Cookie value or null if not found
  */
@@ -61,7 +63,8 @@ export const getCookie = (name) => {
 };
 
 /**
- * Delete a cookie by name
+ * Takes a param of name which is the name of the cookie to delete.
+ * Then checks through all the cookies using a loop, and then deletes the cookie if it is found.
  * @param {string} name - Cookie name
  * @param {string} path - Cookie path (default: '/')
  * @param {string} domain - Cookie domain
@@ -124,17 +127,65 @@ export const getCookiePreferences = () => {
 };
 
 /**
+ * Checks the local storage, gets the cookie-consent item and returns true if it is not null, otherwise returns false.
+ * @returns {boolean} - True if consent has been set
+ */
+export const hasConsentBeenSet = () => {
+  try {
+    return localStorage.getItem("cookie-consent") !== null;
+  } catch {
+    return false;
+  }
+};
+
+/**
  * Save user's cookie consent preferences
  * @param {Object} preferences - Cookie preferences object
  */
 export const saveCookiePreferences = (preferences) => {
   try {
-    localStorage.setItem("cookie-consent", JSON.stringify(preferences));
+    const normalized = {
+      ...DEFAULT_PREFERENCES,
+      ...preferences,
+      essential: true,
+    };
+    localStorage.setItem("cookie-consent", JSON.stringify(normalized));
     return true;
   } catch (error) {
     console.warn("Error saving cookie preferences:", error);
     return false;
   }
+};
+
+/**
+ * Persist consent and apply side effects (analytics on/off).
+ * @param {Object} preferences
+ * @param {{ initAnalytics?: Function, disableAnalytics?: Function }} handlers
+ */
+export const applyConsentPreferences = async (
+  preferences,
+  { initAnalytics, disableAnalytics } = {}
+) => {
+  const normalized = {
+    ...DEFAULT_PREFERENCES,
+    ...preferences,
+    essential: true,
+  };
+
+  saveCookiePreferences(normalized);
+
+  if (normalized.analytics) {
+    if (typeof initAnalytics === "function") {
+      await initAnalytics();
+    }
+  } else {
+    if (typeof disableAnalytics === "function") {
+      disableAnalytics();
+    }
+    clearNonEssentialCookies();
+  }
+
+  return normalized;
 };
 
 /**
@@ -217,7 +268,16 @@ export const isEssentialCookie = (cookieName) => {
  * @returns {string} - Cookie category
  */
 export const getCookieCategory = (cookieName) => {
-  const analyticsKeywords = ["analytics", "google", "gtag", "ga", "fbp"];
+  const analyticsKeywords = [
+    "analytics",
+    "google",
+    "gtag",
+    "_ga",
+    "_gid",
+    "_gat",
+    "firebase",
+    "fbp",
+  ];
   const marketingKeywords = [
     "marketing",
     "ads",

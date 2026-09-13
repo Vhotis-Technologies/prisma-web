@@ -1,249 +1,310 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaShieldAlt, FaLock, FaChartLine, FaSlidersH, FaBullhorn } from "react-icons/fa";
+import {
+  applyConsentPreferences,
+  getCookiePreferences,
+  hasConsentBeenSet,
+  DEFAULT_PREFERENCES,
+} from "../utils/cookieUtils";
+import { initAnalytics, disableAnalytics } from "../lib/firebase";
 
-// Custom Cookie Icon Component
-const CookieIcon = styled.div`
-  width: 80px;
-  height: 80px;
-  background: #e5e7eb;
-  border-radius: 50%;
-  position: relative;
-  margin: 0 auto 1rem auto;
+const PRISMA_PRIMARY = "#7c3aed";
+const PRISMA_PRIMARY_LIGHT = "#8b5cf6";
+const PRISMA_PRIMARY_PALE = "#ede9fe";
+const PRISMA_GRADIENT = "linear-gradient(135deg, #667eea, #764ba2)";
+const TEXT_DARK = "#1a1a1a";
+const TEXT_MUTED = "#6b7280";
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: #d1d5db;
-    border-radius: 50%;
-  }
+export const OPEN_COOKIE_SETTINGS_EVENT = "prisma:open-cookie-settings";
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    background: #9ca3af;
-    border-radius: 50%;
-    box-shadow: 8px 8px 0 #6b7280, -8px 8px 0 #6b7280, 8px -8px 0 #6b7280,
-      -8px -8px 0 #6b7280, 0 15px 0 #6b7280, 0 -15px 0 #6b7280, 15px 0 0 #6b7280,
-      -15px 0 0 #6b7280;
-  }
-`;
-
-const CookieModal = styled(motion.div)`
+const BannerShell = styled(motion.div)`
   position: fixed;
-  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+  padding: 1rem;
+  pointer-events: none;
+
+  @media (min-width: 768px) {
+    padding: 1.25rem 1.5rem;
+  }
+`;
+
+const BannerCard = styled(motion.div)`
+  pointer-events: auto;
+  max-width: 720px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid ${PRISMA_PRIMARY_PALE};
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(124, 58, 237, 0.18),
+    0 4px 16px rgba(26, 26, 26, 0.06);
+  overflow: hidden;
+`;
+
+const AccentBar = styled.div`
+  height: 4px;
+  background: ${PRISMA_GRADIENT};
+`;
+
+const BannerBody = styled.div`
+  padding: 1.25rem 1.35rem 1.35rem;
+
+  @media (min-width: 640px) {
+    padding: 1.5rem 1.75rem 1.6rem;
+  }
+`;
+
+const BannerTop = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.15rem;
 `;
 
-const ModalContent = styled(motion.div)`
-  background: #2d3748;
-  border-radius: 16px;
-  max-width: 400px;
-  width: 100%;
-  padding: 2rem;
-  position: relative;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-`;
-
-const ModalHeader = styled.div`
-  text-align: center;
-  margin-bottom: 1.5rem;
-
-  h2 {
-    margin: 0 0 0.5rem 0;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  p {
-    margin: 0;
-    color: #cbd5e0;
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-`;
-
-const CookieActions = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-`;
-
-const AcceptButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: #f7fafc;
-  color: #2d3748;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-
-  &:hover {
-    background: #edf2f7;
-  }
-`;
-
-const DeclineButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background: transparent;
-  color: #cbd5e0;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-
-  &:hover {
-    color: white;
-  }
-`;
-
-const SettingsLink = styled.button`
-  background: none;
-  border: none;
-  color: #63b3ed;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
-  font: inherit;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-
-  &:hover {
-    color: #90cdf4;
-  }
-`;
-
-const SettingsModal = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-  padding: 2rem;
-`;
-
-const SettingsModalContent = styled(motion.div)`
-  background: white;
+const IconBadge = styled.div`
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${PRISMA_PRIMARY_PALE};
+  color: ${PRISMA_PRIMARY};
+  font-size: 1.15rem;
 `;
 
-const SettingsModalHeader = styled.div`
-  padding: 2rem 2rem 1.5rem 2rem;
-  border-bottom: 1px solid #f3f4f6;
-
+const BannerCopy = styled.div`
   h2 {
-    margin: 0 0 0.5rem 0;
-    color: #1f2937;
-    font-size: 1.5rem;
-    font-weight: 600;
+    margin: 0 0 0.35rem;
+    color: ${TEXT_DARK};
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   p {
     margin: 0;
-    color: #6b7280;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    color: ${TEXT_MUTED};
+    font-size: 0.92rem;
+    line-height: 1.55;
   }
 
-  .learn-more {
-    color: #10b981;
+  a {
+    color: ${PRISMA_PRIMARY};
+    font-weight: 600;
     text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
 
     &:hover {
-      color: #059669;
+      text-decoration: underline;
     }
   }
 `;
 
-const SettingsModalBody = styled.div`
-  padding: 2rem;
+const BannerActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
-const CookieCategory = styled.div`
+const PrimaryButton = styled(motion.button)`
+  flex: 1;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  background: ${PRISMA_GRADIENT};
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+`;
+
+const SecondaryButton = styled(motion.button)`
+  flex: 1;
+  cursor: pointer;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: ${PRISMA_PRIMARY};
+  background: ${PRISMA_PRIMARY_PALE};
+  border: 1px solid transparent;
+
+  &:hover {
+    background: #e4ddfc;
+  }
+`;
+
+const TextButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${TEXT_MUTED};
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.25rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: ${PRISMA_PRIMARY};
+  }
+
+  @media (min-width: 560px) {
+    margin-left: 0.25rem;
+    white-space: nowrap;
+  }
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+
+  @media (min-width: 640px) {
+    align-items: center;
+    padding: 1.5rem;
+  }
+`;
+
+const SettingsCard = styled(motion.div)`
+  width: 100%;
+  max-width: 520px;
+  max-height: min(88vh, 680px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid ${PRISMA_PRIMARY_PALE};
+  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.2);
+`;
+
+const SettingsHeader = styled.div`
+  padding: 1.5rem 1.5rem 1.1rem;
+  border-bottom: 1px solid #f3f0ff;
+
+  h2 {
+    margin: 0 0 0.4rem;
+    color: ${TEXT_DARK};
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: ${TEXT_MUTED};
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  a {
+    color: ${PRISMA_PRIMARY};
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const SettingsBody = styled.div`
+  padding: 0.5rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+`;
+
+const CategoryRow = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  gap: 1rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid #f3f0ff;
 
   &:last-child {
     border-bottom: none;
   }
+`;
 
-  .category-info {
-    flex: 1;
-    margin-right: 1rem;
-  }
+const CategoryInfo = styled.div`
+  display: flex;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+`;
 
+const CategoryIcon = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: ${PRISMA_PRIMARY_PALE};
+  color: ${PRISMA_PRIMARY};
+  font-size: 0.9rem;
+`;
+
+const CategoryText = styled.div`
   h3 {
-    margin: 0 0 0.5rem 0;
-    color: #1f2937;
-    font-size: 1rem;
+    margin: 0 0 0.3rem;
+    color: ${TEXT_DARK};
+    font-size: 0.98rem;
     font-weight: 600;
   }
 
   p {
     margin: 0;
-    color: #6b7280;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    color: ${TEXT_MUTED};
+    font-size: 0.85rem;
+    line-height: 1.45;
   }
 `;
 
-const LockIndicator = styled.div`
-  display: flex;
+const AlwaysOn = styled.span`
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 24px;
-  background: #f3f4f6;
-  border-radius: 12px;
-  color: #6b7280;
-  font-size: 0.8rem;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: ${PRISMA_PRIMARY_PALE};
+  color: ${PRISMA_PRIMARY};
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
 `;
 
-const ToggleSwitch = styled.label`
+const Toggle = styled.label`
   position: relative;
   display: inline-block;
-  width: 44px;
-  height: 24px;
+  width: 48px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
 
   input {
     opacity: 0;
@@ -253,310 +314,317 @@ const ToggleSwitch = styled.label`
 
   .slider {
     position: absolute;
+    inset: 0;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e5e7eb;
-    transition: 0.3s;
-    border-radius: 24px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    transition: 0.2s ease;
 
     &:before {
-      position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
+      position: absolute;
+      height: 22px;
+      width: 22px;
       left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.3s;
+      top: 3px;
+      background: #fff;
       border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      transition: 0.2s ease;
     }
   }
 
   input:checked + .slider {
-    background-color: #10b981;
+    background: ${PRISMA_PRIMARY_LIGHT};
   }
 
   input:checked + .slider:before {
     transform: translateX(20px);
   }
 
-  input:disabled + .slider {
-    background-color: #e5e7eb;
-    cursor: not-allowed;
+  input:focus-visible + .slider {
+    outline: 2px solid ${PRISMA_PRIMARY};
+    outline-offset: 2px;
   }
 `;
 
-const SettingsModalFooter = styled.div`
-  padding: 1.5rem 2rem 2rem 2rem;
-  border-top: 1px solid #f3f4f6;
+const SettingsFooter = styled.div`
+  padding: 1.15rem 1.5rem 1.5rem;
+  border-top: 1px solid #f3f0ff;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-`;
+  gap: 0.65rem;
 
-const AcceptAllButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: #10b981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-
-  &:hover {
-    background: #059669;
+  @media (min-width: 480px) {
+    flex-direction: row;
   }
 `;
 
-const SaveSettingsButton = styled(motion.button)`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: white;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-weight: 600;
+const OutlineButton = styled(motion.button)`
+  flex: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
   font-size: 0.95rem;
+  color: ${TEXT_DARK};
+  background: #fff;
+  border: 1px solid #e5e7eb;
 
   &:hover {
-    background: #f9fafb;
+    background: #fafafa;
+    border-color: #d1d5db;
   }
 `;
+
+const CATEGORIES = [
+  {
+    key: "essential",
+    title: "Strictly necessary",
+    description:
+      "Required for security, navigation, and remembering your cookie choices. Always on.",
+    icon: FaLock,
+    locked: true,
+  },
+  {
+    key: "analytics",
+    title: "Analytics",
+    description:
+      "Helps us understand how visitors use Prisma via Google Analytics (Firebase). No ads.",
+    icon: FaChartLine,
+    locked: false,
+  },
+  {
+    key: "functional",
+    title: "Preferences",
+    description:
+      "Remembers choices that make the site feel more personal, such as display preferences.",
+    icon: FaSlidersH,
+    locked: false,
+  },
+  {
+    key: "marketing",
+    title: "Marketing",
+    description:
+      "Optional cookies for future campaigns and measuring promotional content. Off by default.",
+    icon: FaBullhorn,
+    locked: false,
+  },
+];
 
 const CookieConsent = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [cookiePreferences, setCookiePreferences] = useState({
-    essential: true, // Always enabled
-    analytics: false,
-    marketing: false,
-    functional: false,
-  });
+  const [saving, setSaving] = useState(false);
+  const [preferences, setPreferences] = useState(DEFAULT_PREFERENCES);
 
   useEffect(() => {
-    // Check if user has already made a choice
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
+    if (!hasConsentBeenSet()) {
       setShowBanner(true);
+      setPreferences(DEFAULT_PREFERENCES);
     } else {
-      const preferences = JSON.parse(consent);
-      setCookiePreferences(preferences);
+      setPreferences(getCookiePreferences());
     }
   }, []);
 
-  const savePreferences = (preferences) => {
-    localStorage.setItem("cookie-consent", JSON.stringify(preferences));
-    setCookiePreferences(preferences);
-    setShowBanner(false);
-    setShowSettings(false);
+  useEffect(() => {
+    const openSettings = () => {
+      setPreferences(getCookiePreferences());
+      setShowSettings(true);
+      setShowBanner(false);
+    };
 
-    // Here you would typically initialize analytics or other tracking based on preferences
-    if (preferences.analytics) {
-      // Initialize Google Analytics or other analytics tools
-      console.log("Analytics cookies enabled");
+    window.addEventListener(OPEN_COOKIE_SETTINGS_EVENT, openSettings);
+    return () =>
+      window.removeEventListener(OPEN_COOKIE_SETTINGS_EVENT, openSettings);
+  }, []);
+
+  const persist = useCallback(async (next) => {
+    setSaving(true);
+    try {
+      const saved = await applyConsentPreferences(next, {
+        initAnalytics,
+        disableAnalytics,
+      });
+      setPreferences(saved);
+      setShowBanner(false);
+      setShowSettings(false);
+    } finally {
+      setSaving(false);
     }
+  }, []);
 
-    if (preferences.marketing) {
-      // Initialize marketing tracking
-      console.log("Marketing cookies enabled");
-    }
-
-    if (preferences.functional) {
-      // Initialize functional features
-      console.log("Functional cookies enabled");
-    }
-  };
-
-  const acceptAll = () => {
-    const allAccepted = {
+  const acceptAll = () =>
+    persist({
       essential: true,
       analytics: true,
-      marketing: true,
       functional: true,
-    };
-    savePreferences(allAccepted);
-  };
+      marketing: true,
+    });
 
-  const acceptEssential = () => {
-    const essentialOnly = {
+  const acceptEssential = () =>
+    persist({
       essential: true,
       analytics: false,
-      marketing: false,
       functional: false,
-    };
-    savePreferences(essentialOnly);
-  };
+      marketing: false,
+    });
 
-  const saveCustomPreferences = () => {
-    savePreferences(cookiePreferences);
-  };
+  const saveCustom = () => persist(preferences);
 
-  const handlePreferenceChange = (category) => {
-    if (category === "essential") return; // Essential cookies cannot be disabled
-
-    setCookiePreferences((prev) => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
-  };
-
-  const openSettings = () => {
-    setShowSettings(true);
-  };
-
-  const closeSettings = () => {
-    setShowSettings(false);
+  const toggleCategory = (key) => {
+    if (key === "essential") return;
+    setPreferences((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
     <>
       <AnimatePresence>
-        {showBanner && (
-          <CookieModal
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeSettings}
+        {showBanner && !showSettings && (
+          <BannerShell
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 320, damping: 28 }}
           >
-            <ModalContent
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ModalHeader>
-                <CookieIcon />
-                <h2>We use Cookies</h2>
-                <p>
-                  We use cookies to enhance your browsing experience. By
-                  continuing, you agree to our Cookie Policy.
-                </p>
-              </ModalHeader>
-
-              <CookieActions>
-                <AcceptButton
-                  onClick={acceptAll}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Accept cookies
-                </AcceptButton>
-                <DeclineButton
-                  onClick={acceptEssential}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Decline cookies
-                </DeclineButton>
-                <div style={{ textAlign: "center", marginTop: "0.5rem" }}>
-                  <SettingsLink onClick={openSettings}>
-                    Cookie Settings
-                  </SettingsLink>
-                </div>
-              </CookieActions>
-            </ModalContent>
-          </CookieModal>
+            <BannerCard>
+              <AccentBar />
+              <BannerBody>
+                <BannerTop>
+                  <IconBadge>
+                    <FaShieldAlt />
+                  </IconBadge>
+                  <BannerCopy>
+                    <h2>Your privacy choices</h2>
+                    <p>
+                      We use essential cookies to run this site, and optional
+                      analytics cookies to improve Prisma. You can change this
+                      anytime.{" "}
+                      <a href="/privacy-policy">Privacy Policy</a>
+                    </p>
+                  </BannerCopy>
+                </BannerTop>
+                <BannerActions>
+                  <PrimaryButton
+                    type="button"
+                    disabled={saving}
+                    onClick={acceptAll}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                  >
+                    Accept all
+                  </PrimaryButton>
+                  <SecondaryButton
+                    type="button"
+                    disabled={saving}
+                    onClick={acceptEssential}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                  >
+                    Essential only
+                  </SecondaryButton>
+                  <TextButton
+                    type="button"
+                    disabled={saving}
+                    onClick={() => setShowSettings(true)}
+                  >
+                    Customize
+                  </TextButton>
+                </BannerActions>
+              </BannerBody>
+            </BannerCard>
+          </BannerShell>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
         {showSettings && (
-          <SettingsModal
+          <Overlay
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeSettings}
+            onClick={() => {
+              if (hasConsentBeenSet()) {
+                setShowSettings(false);
+              } else {
+                setShowSettings(false);
+                setShowBanner(true);
+              }
+            }}
           >
-            <SettingsModalContent
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+            <SettingsCard
+              initial={{ y: 24, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 24, opacity: 0, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 340, damping: 30 }}
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="cookie-settings-title"
             >
-              <SettingsModalHeader>
-                <h2>Cookie settings</h2>
+              <AccentBar />
+              <SettingsHeader>
+                <h2 id="cookie-settings-title">Cookie settings</h2>
                 <p>
-                  We use cookies, some of them are essential, others are
-                  optional. <span className="learn-more">Learn more</span>
+                  Choose which optional cookies Prisma may use. Essential
+                  cookies stay on so the site works.{" "}
+                  <a href="/privacy-policy">Learn more</a>
                 </p>
-              </SettingsModalHeader>
+              </SettingsHeader>
 
-              <SettingsModalBody>
-                <CookieCategory>
-                  <div className="category-info">
-                    <h3>Strictly Necessary</h3>
-                    <p>
-                      These cookies are necessary for the website and can't be
-                      deactivated.
-                    </p>
-                  </div>
-                  <LockIndicator>🔒</LockIndicator>
-                </CookieCategory>
+              <SettingsBody>
+                {CATEGORIES.map(({ key, title, description, icon: Icon, locked }) => (
+                  <CategoryRow key={key}>
+                    <CategoryInfo>
+                      <CategoryIcon>
+                        <Icon />
+                      </CategoryIcon>
+                      <CategoryText>
+                        <h3>{title}</h3>
+                        <p>{description}</p>
+                      </CategoryText>
+                    </CategoryInfo>
+                    {locked ? (
+                      <AlwaysOn>
+                        <FaLock aria-hidden /> Always on
+                      </AlwaysOn>
+                    ) : (
+                      <Toggle>
+                        <input
+                          type="checkbox"
+                          checked={!!preferences[key]}
+                          onChange={() => toggleCategory(key)}
+                          aria-label={`Enable ${title} cookies`}
+                        />
+                        <span className="slider" />
+                      </Toggle>
+                    )}
+                  </CategoryRow>
+                ))}
+              </SettingsBody>
 
-                <CookieCategory>
-                  <div className="category-info">
-                    <h3>Marketing & Analytics</h3>
-                    <p>
-                      These cookies can be set by our advertising partners
-                      through our website.
-                    </p>
-                  </div>
-                  <ToggleSwitch>
-                    <input
-                      type="checkbox"
-                      checked={cookiePreferences.marketing}
-                      onChange={() => handlePreferenceChange("marketing")}
-                    />
-                    <span className="slider"></span>
-                  </ToggleSwitch>
-                </CookieCategory>
-
-                <CookieCategory>
-                  <div className="category-info">
-                    <h3>Preferences</h3>
-                    <p>
-                      To individualize your content, we use tools that
-                      personalize your web experience.
-                    </p>
-                  </div>
-                  <ToggleSwitch>
-                    <input
-                      type="checkbox"
-                      checked={cookiePreferences.functional}
-                      onChange={() => handlePreferenceChange("functional")}
-                    />
-                    <span className="slider"></span>
-                  </ToggleSwitch>
-                </CookieCategory>
-              </SettingsModalBody>
-
-              <SettingsModalFooter>
-                <AcceptAllButton
+              <SettingsFooter>
+                <PrimaryButton
+                  type="button"
+                  disabled={saving}
                   onClick={acceptAll}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
-                  Accept all cookies
-                </AcceptAllButton>
-                <SaveSettingsButton
-                  onClick={saveCustomPreferences}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  Accept all
+                </PrimaryButton>
+                <OutlineButton
+                  type="button"
+                  disabled={saving}
+                  onClick={saveCustom}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
-                  Save settings
-                </SaveSettingsButton>
-              </SettingsModalFooter>
-            </SettingsModalContent>
-          </SettingsModal>
+                  Save preferences
+                </OutlineButton>
+              </SettingsFooter>
+            </SettingsCard>
+          </Overlay>
         )}
       </AnimatePresence>
     </>
