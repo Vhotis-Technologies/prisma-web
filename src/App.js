@@ -10,9 +10,7 @@ import {
   FaDownload,
   FaCheck,
   FaChevronDown,
-  FaPlay,
   FaHandshake,
-  FaFileAlt,
   FaCogs,
 } from "react-icons/fa";
 import "./App.css";
@@ -25,6 +23,7 @@ import CookieConsent, {
   OPEN_COOKIE_SETTINGS_EVENT,
 } from "./components/CookieConsent";
 import CookieDemo from "./components/CookieDemo";
+import ContactSupportModal from "./components/ContactSupportModal";
 import { loginUrl, welcomeUrl } from "./config";
 import { hasConsentForCategory } from "./utils/cookieUtils";
 import { initAnalytics } from "./lib/firebase";
@@ -624,37 +623,6 @@ const MobileImage = styled.div`
   }
 `;
 
-const VideoSection = styled.section`
-  padding: 4rem 0;
-  background: ${PRISMA_PRIMARY};
-  color: white;
-  text-align: center;
-`;
-
-const VideoContent = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
-const PlayButton = styled(motion.button)`
-  background: white;
-  color: #1a1a1a;
-  border: 2px solid #1a1a1a;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 auto;
-
-  &:hover {
-    background: #f5f5f5;
-  }
-`;
-
 // Transform Section
 const TransformSection = styled.section`
   padding: 4rem 0;
@@ -774,51 +742,6 @@ const FleetCardText = styled.p`
   line-height: 1.5;
 `;
 
-// Premium & Documentation Section
-const PremiumDocsSection = styled.section`
-  padding: 4rem 0;
-  background: #1a1a1a;
-  color: white;
-`;
-
-const PremiumDocsContent = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-`;
-
-const PremiumDocsTitle = styled.h2`
-  font-size: 2.25rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-`;
-
-const PremiumDocsText = styled.p`
-  font-size: 1.1rem;
-  color: #ccc;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-`;
-
-const PremiumDocsCTA = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: ${PRISMA_PRIMARY};
-  color: white;
-  padding: 0.9rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 14px rgba(0, 116, 212, 0.4);
-
-  &:hover {
-    background: ${PRISMA_PRIMARY_HOVER};
-    box-shadow: 0 6px 20px rgba(0, 116, 212, 0.45);
-  }
-`;
-
 // Licensed Section
 const LicensedSection = styled.section`
   padding: 4rem 0;
@@ -860,93 +783,6 @@ const LicensedText = styled.p`
   margin: 0 auto;
 `;
 
-// Gift Section
-const GiftSection = styled.section`
-  padding: 4rem 0;
-  background: white;
-`;
-
-const GiftContent = styled.div`
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const GiftTitle = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 1rem;
-`;
-
-const GiftSubtitle = styled.p`
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 2rem;
-`;
-
-const GiftCTA = styled.div`
-  color: ${PRISMA_PRIMARY};
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-`;
-
-const CarThumbnails = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-  overflow-x: auto;
-  padding: 1rem 0;
-`;
-
-const CarThumbnail = styled.div`
-  width: 120px;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 2px solid ${(props) => (props.active ? "#1a1a1a" : "transparent")};
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: #1a1a1a;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const GiftOptions = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 400px;
-  margin: 0 auto;
-`;
-
-const GiftOption = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background: #e9ecef;
-  }
-`;
-
 // Mobile Scheduling Section
 const MobileSchedulingSection = styled.section`
   padding: 4rem 0;
@@ -978,13 +814,18 @@ const MobileSubtitle = styled.p`
   margin-bottom: 1rem;
 `;
 
-const PhoneNumber = styled.a`
+const PhoneNumber = styled.button`
   font-size: 1.5rem;
   font-weight: 700;
   color: ${PRISMA_PRIMARY};
   text-decoration: none;
   margin-bottom: 2rem;
   display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
 
   &:hover {
     text-decoration: underline;
@@ -1146,8 +987,8 @@ const FooterBottom = styled.div`
 function App() {
   const [currentRoute, setCurrentRoute] = useState("home");
   const [activePackage, setActivePackage] = useState("basic");
-  const [selectedCar, setSelectedCar] = useState(0);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     // Simple routing based on URL path
@@ -1211,42 +1052,41 @@ function App() {
     );
   }
 
-  const carImages = [
-    { src: heroImage, name: "Porsche" },
-    { src: carPolishing, name: "Ferrari" },
-    { src: interiorCleaning, name: "Luxury" },
-  ];
-
   const faqItems = [
     {
       question: "How do I book a service?",
       answer:
-        "Book on the web at app.prismavalet.com or in the Prisma Car Care app on the App Store and Google Play. On the web you can create an account or book as a guest. We do not currently accept bookings over the phone.",
+        "You can either book as a guest or as a registered user using the webpage",
+    },
+    {
+      question: "Is Prisma Car Care Eco-Friendly?",
+      answer:
+        "Yes, we are committed to reducing our environmental impact. We use a range of eco-friendly products and practices to ensure that our services are as sustainable as possible. Furthermore, we aim to educate our clients on the importance of sustainable detailing practices, and also provide a range of valeting options to choose from.",
     },
     {
       question: "Can you detail my car at my home, office or apartment?",
       answer:
-        "Yes! We provide mobile detailing services at your home, office, or apartment. Our team brings all necessary equipment and supplies to your location.",
+        "Yes, we provide mobile detailing services anywhere in the greater Dublin area. Our team brings all necessary equipment and supplies to your location to ensure the best possible service.",
     },
     {
       question: "How long does the detail usually take?",
       answer:
-        "Service times vary depending on the package selected. Our Full Detail typically takes 2-3 hours, while our Quick Refres takes about 1 hour and, is designed for professionals who want to keep their cars looking brand new.",
+        "Service times vary depending on the package selected. Packages typically range from 1 hour to 7 hours, depending on the size of the vehicle and the package selected.",
     },
     {
       question: "How long will the detail last?",
       answer:
-        "Our detailing services typically last 2-4 weeks depending on weather conditions and how often you drive. We use premium products to ensure long-lasting results. However, we recommend you book the Quick Sparkle every 2 weeks to keep your car looking brand new.",
+        "Our detailing services typically last 2-4 weeks depending on weather conditions and how often you drive. We use premium products to ensure long-lasting results. However, we recommend you book the Prisma Quick Sparkle every 2 weeks to ensure your vehicle is always looking its best.",
     },
     {
       question: "What if I don't have access to water or electricity?",
       answer:
-        "No problem! Our mobile units are fully self-contained with water tanks and generators, so we can provide service anywhere.",
+        "No problem! Our mobile units are fully self-contained with water tanks and generators, so we can provide service anywhere. We also have a range of products that can be used to clean your vehicle without the need for water or electricity.",
     },
     {
       question: "What if I no longer need the service?",
       answer:
-        "You can cancel your service at any time through our mobile app. Please note that cancellations made within 12 hours of the service will not be refunded. also note that once a service is in progress, it cannot be cancelled.",
+        "You can cancel your service at any time via web or using our mobile app. Please read our terms of service for more information.",
     },
     {
       question: "What if I want to reschedule the service?",
@@ -1256,17 +1096,17 @@ function App() {
     {
       question: "Can i choose a detailer who would do the service?",
       answer:
-        "No! you can not select a specific detailer to render the service. our system is designed to allocate services to the best available detailer, based on their location, availability and ratings from previous services. This ensures that you receive the best possible service.",
+        "No! you can not select a specific detailer to render the service. our system is designed to allocate services to the best available detailer, based on their location, availability and ratings from previous services. This is to ensures that all our clients receive the best possible service.",
     },
     {
       question: "Where are you located?",
       answer:
-        "We are currently located in Dublin, Ireland. We will be expanding to other locations in the near future.",
+        "We are currently located in the Dublin, and the greater Dublin area. We are working to bring our services closer to you.",
     },
     {
       question: "What if I have more questions?",
       answer:
-        "Please feel free to contact us at +353 899 765 197 or email us at support@prismavalet.com.",
+        "Please feel free to contact us via Contact support in the footer — we’ll get back to you by email.",
     },
   ];
 
@@ -1417,7 +1257,7 @@ function App() {
                 Get Your Services Delivered To You Anywhere At Your Convenience
               </HeroSubtitle>
               <HeroTagline>
-                Premium mobile detailing with flexible scheduling, fleet & partnership programs, and clear documentation—so you can book in seconds and keep every vehicle at its best.
+                Premium mobile detailing with flexible scheduling and fleet &amp; partnership programs, so you can book in seconds and keep every vehicle at its best.
               </HeroTagline>
               <ValueStrip>
                 <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
@@ -1428,9 +1268,6 @@ function App() {
                 </ValueItem>
                 <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                   <FaCogs /> Flexibility
-                </ValueItem>
-                <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-                  <FaFileAlt /> Premium & Docs
                 </ValueItem>
               </ValueStrip>
             </motion.div>
@@ -1850,57 +1687,6 @@ function App() {
         </Container>
       </LicensedSection>
 
-      {/* Gift Section */}
-      <GiftSection>
-        <Container>
-          <GiftContent>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <GiftTitle>Looking for a great gift?</GiftTitle>
-              <GiftSubtitle>
-                Prisma Car Care is perfect for birthdays, graduations, holidays &
-                more.
-              </GiftSubtitle>
-              <GiftCTA>
-                Personalize gift below
-                <FaChevronDown />
-              </GiftCTA>
-            </motion.div>
-
-            <CarThumbnails>
-              {carImages.map((car, index) => (
-                <CarThumbnail
-                  key={index}
-                  active={selectedCar === index}
-                  onClick={() => setSelectedCar(index)}
-                >
-                  <img src={car.src} alt={car.name} />
-                </CarThumbnail>
-              ))}
-            </CarThumbnails>
-
-            <GiftOptions>
-              <GiftOption>
-                <span>Full Detail</span>
-                <FaChevronDown />
-              </GiftOption>
-              <GiftOption>
-                <span>Interior Detail</span>
-                <FaChevronDown />
-              </GiftOption>
-              <GiftOption>
-                <span>Exterior Detail</span>
-                <FaChevronDown />
-              </GiftOption>
-            </GiftOptions>
-          </GiftContent>
-        </Container>
-      </GiftSection>
-
       {/* Mobile Scheduling Section */}
       <MobileSchedulingSection>
         <Container>
@@ -1934,90 +1720,13 @@ function App() {
                 <PrimaryButton href={welcomeUrl}>Get started</PrimaryButton>
                 <SecondaryButton href={loginUrl}>Log in</SecondaryButton>
               </CTAButtons>
-              <PhoneNumber href="mailto:support@prismavalet.com">
-                support@prismavalet.com
+              <PhoneNumber type="button" onClick={() => setShowContactModal(true)}>
+                Contact support
               </PhoneNumber>
             </motion.div>
           </MobileSchedulingContent>
         </Container>
       </MobileSchedulingSection>
-
-      {/* Video Section */}
-      <VideoSection>
-        <Container>
-          <VideoContent>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              HOW WE DETAIL
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              style={{ fontSize: "1rem", marginBottom: "1rem" }}
-            >
-              SNEAK PEAK
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-              style={{ fontSize: "1.2rem", marginBottom: "2rem" }}
-            >
-              2 minute video
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              viewport={{ once: true }}
-              style={{ marginBottom: "2rem" }}
-            >
-              See what makes Prisma Car Care the top choice for everything car
-              detailing—premium service, flexibility, and clear processes. At Home or At Shop.
-            </motion.p>
-            <PlayButton
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaPlay />
-              Watch
-            </PlayButton>
-          </VideoContent>
-        </Container>
-      </VideoSection>
-
-      {/* Premium Services & Documentation Section */}
-      <PremiumDocsSection>
-        <Container>
-          <PremiumDocsContent>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <PremiumDocsTitle>Premium Services & Documentation</PremiumDocsTitle>
-              <PremiumDocsText>
-                From Quick Sparkle to Ultimate Prestige, every package is delivered to a high standard with clear service definitions. Fleet and partner programs come with documentation and support so you know exactly what you're getting—and how to get the most out of the platform.
-              </PremiumDocsText>
-              <PremiumDocsCTA href="mailto:support@prismavalet.com?subject=Partnership%20or%20Documentation%20request">
-                <FaFileAlt /> Contact for partnerships & docs
-              </PremiumDocsCTA>
-            </motion.div>
-          </PremiumDocsContent>
-        </Container>
-      </PremiumDocsSection>
 
       {/* FAQ Section */}
       <FAQSection>
@@ -2088,11 +1797,14 @@ function App() {
             <FooterHeading>Support</FooterHeading>
             <FooterLinks>
               <li>
-                <a href="mailto:support@prismavalet.com?subject=Support">Contact support</a>
-              </li>
-              <li>
-                <a href="mailto:support@prismavalet.com?subject=Documentation%20or%20Partnership">
-                  Documentation &amp; Partnerships
+                <a
+                  href="#contact-support"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowContactModal(true);
+                  }}
+                >
+                  Contact support
                 </a>
               </li>
             </FooterLinks>
@@ -2103,6 +1815,11 @@ function App() {
           <p className="powered">Powered by @vhotis technology</p>
         </FooterBottom>
       </Footer>
+
+      <ContactSupportModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
 
       {/* Cookie Consent Banner */}
       <CookieConsent />

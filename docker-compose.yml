@@ -4,6 +4,7 @@ services:
       context: .
       args:
         REACT_APP_CLIENT_WEB_URL: ${REACT_APP_CLIENT_WEB_URL:-https://staging.app.prismavalet.com}
+        REACT_APP_API_BASE_URL: ${REACT_APP_API_BASE_URL:-https://staging.app.prismavalet.com/client}
         REACT_APP_FIREBASE_API_KEY: ${REACT_APP_FIREBASE_API_KEY}
         REACT_APP_FIREBASE_AUTH_DOMAIN: ${REACT_APP_FIREBASE_AUTH_DOMAIN}
         REACT_APP_FIREBASE_PROJECT_ID: ${REACT_APP_FIREBASE_PROJECT_ID}
