@@ -44,18 +44,16 @@ const Container = styled.div`
   padding: 0 20px;
 `;
 
-// Prisma brand palette (aligns with client app and transfer flow)
-const PRISMA_PRIMARY = "#7c3aed";
-const PRISMA_PRIMARY_LIGHT = "#8b5cf6";
-const PRISMA_PRIMARY_PALE = "#ede9fe";
-const PRISMA_GRADIENT_START = "#667eea";
-const PRISMA_GRADIENT_END = "#764ba2";
-const TEXT_DARK = "#1a1a1a";
-const TEXT_MUTED = "#6b7280";
+// Prisma brand palette (matches prisma_web / prisma_client)
+const PRISMA_PRIMARY = "#0074d4";
+const PRISMA_PRIMARY_HOVER = "#005fad";
+const PRISMA_PRIMARY_SOFT = "#e6f3fb";
+const TEXT_DARK = "#212121";
+const TEXT_MUTED = "#424242";
 
 // Modern Hero Section – Prisma aesthetic
 const HeroSection = styled.section`
-  background: linear-gradient(180deg, ${PRISMA_PRIMARY_PALE} 0%, #ffffff 50%, #faf5ff 100%);
+  background: linear-gradient(180deg, ${PRISMA_PRIMARY_SOFT} 0%, #ffffff 50%, #e6f3fb 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -91,16 +89,16 @@ const HeaderLink = styled.a`
 `;
 
 const HeaderCta = styled.a`
-  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
+  background: ${PRISMA_PRIMARY};
   color: white;
   text-decoration: none;
   padding: 0.6rem 1.15rem;
   border-radius: 10px;
   font-weight: 600;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 116, 212, 0.35);
 
   &:hover {
-    filter: brightness(1.08);
+    background: ${PRISMA_PRIMARY_HOVER};
     color: white;
   }
 `;
@@ -111,7 +109,7 @@ const Logo = styled.h1`
   color: ${TEXT_DARK};
   font-style: italic;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
+  background: ${PRISMA_PRIMARY};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -174,7 +172,7 @@ const ValueItem = styled(motion.div)`
   padding: 0.75rem 1rem;
   background: rgba(255,255,255,0.9);
   border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 116, 212, 0.08);
   font-size: 0.95rem;
   font-weight: 600;
   color: ${TEXT_DARK};
@@ -221,7 +219,7 @@ const CTAButtons = styled.div`
 `;
 
 const PrimaryButton = styled(motion.a)`
-  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
+  background: ${PRISMA_PRIMARY};
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -236,19 +234,19 @@ const PrimaryButton = styled(motion.a)`
   gap: 0.5rem;
   min-width: 160px;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 116, 212, 0.4);
 
   &:hover {
-    filter: brightness(1.08);
-    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+    background: ${PRISMA_PRIMARY_HOVER};
+    box-shadow: 0 6px 20px rgba(0, 116, 212, 0.45);
     color: white;
   }
 `;
 
 const SecondaryButton = styled(motion.a)`
-  background: ${PRISMA_PRIMARY_PALE};
+  background: ${PRISMA_PRIMARY_SOFT};
   color: ${PRISMA_PRIMARY};
-  border: 2px solid ${PRISMA_PRIMARY_LIGHT};
+  border: 2px solid ${PRISMA_PRIMARY};
   padding: 1rem 2rem;
   border-radius: 10px;
   font-size: 1.1rem;
@@ -263,7 +261,7 @@ const SecondaryButton = styled(motion.a)`
   text-decoration: none;
 
   &:hover {
-    background: #ddd6fe;
+    background: #d6ebf8;
     border-color: ${PRISMA_PRIMARY};
     color: ${PRISMA_PRIMARY};
   }
@@ -272,7 +270,7 @@ const SecondaryButton = styled(motion.a)`
 // Problems Section
 const ProblemsSection = styled.section`
   padding: 5rem 0;
-  background: #faf5ff;
+  background: #e6f3fb;
   color: ${TEXT_DARK};
 `;
 
@@ -312,17 +310,17 @@ const ProblemsGrid = styled.div`
 
 const ProblemCard = styled(motion.div)`
   background: white;
-  border: 1px solid #ede9fe;
+  border: 1px solid #e6f3fb;
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(124, 58, 237, 0.06);
+  box-shadow: 0 4px 6px rgba(0, 116, 212, 0.06);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
-    border-color: ${PRISMA_PRIMARY_LIGHT};
+    box-shadow: 0 10px 25px rgba(0, 116, 212, 0.12);
+    border-color: ${PRISMA_PRIMARY};
   }
 `;
 
@@ -348,7 +346,7 @@ const ProblemDescription = styled.p`
 // Service Packages Section
 const PackagesSection = styled.section`
   padding: 4rem 0;
-  background: #faf5ff;
+  background: #e6f3fb;
 `;
 
 const SectionTitle = styled.h2`
@@ -362,7 +360,7 @@ const SectionTitle = styled.h2`
 const PackageTabs = styled.div`
   display: flex;
   margin-bottom: 2rem;
-  background: ${PRISMA_PRIMARY_PALE};
+  background: ${PRISMA_PRIMARY_SOFT};
   border-radius: 25px;
   padding: 4px;
   overflow-x: auto;
@@ -383,7 +381,7 @@ const PackageTabs = styled.div`
     left: 0;
     width: 20px;
     height: 100%;
-    background: linear-gradient(to right, ${PRISMA_PRIMARY_PALE}, transparent);
+    background: linear-gradient(to right, ${PRISMA_PRIMARY_SOFT}, transparent);
     pointer-events: none;
     z-index: 1;
   }
@@ -395,7 +393,7 @@ const PackageTabs = styled.div`
     right: 0;
     width: 20px;
     height: 100%;
-    background: linear-gradient(to left, ${PRISMA_PRIMARY_PALE}, transparent);
+    background: linear-gradient(to left, ${PRISMA_PRIMARY_SOFT}, transparent);
     pointer-events: none;
     z-index: 1;
   }
@@ -418,7 +416,7 @@ const TabButton = styled.button`
   flex-shrink: 0;
   min-width: 80px;
   white-space: nowrap;
-  box-shadow: ${(props) => (props.active ? "0 2px 8px rgba(124, 58, 237, 0.2)" : "none")};
+  box-shadow: ${(props) => (props.active ? "0 2px 8px rgba(0, 116, 212, 0.2)" : "none")};
 
   @media (max-width: 768px) {
     padding: 0.6rem 1rem;
@@ -582,7 +580,7 @@ const TrustBadge = styled.div`
 // Mobile Features Section
 const MobileSection = styled.section`
   padding: 4rem 0;
-  background: #faf5ff;
+  background: #e6f3fb;
 `;
 
 const MobileGrid = styled.div`
@@ -628,7 +626,7 @@ const MobileImage = styled.div`
 
 const VideoSection = styled.section`
   padding: 4rem 0;
-  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START} 0%, ${PRISMA_GRADIENT_END} 100%);
+  background: ${PRISMA_PRIMARY};
   color: white;
   text-align: center;
 `;
@@ -707,7 +705,7 @@ const TransformImage = styled.div`
 // Fleet & Partnership Section
 const FleetSection = styled.section`
   padding: 5rem 0;
-  background: linear-gradient(180deg, #ffffff 0%, ${PRISMA_PRIMARY_PALE} 50%, #ffffff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, ${PRISMA_PRIMARY_SOFT} 50%, #ffffff 100%);
   color: ${TEXT_DARK};
 `;
 
@@ -806,18 +804,18 @@ const PremiumDocsCTA = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, ${PRISMA_GRADIENT_START}, ${PRISMA_GRADIENT_END});
+  background: ${PRISMA_PRIMARY};
   color: white;
   padding: 0.9rem 1.5rem;
   border-radius: 10px;
   font-weight: 600;
   text-decoration: none;
-  transition: filter 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 116, 212, 0.4);
 
   &:hover {
-    filter: brightness(1.08);
-    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+    background: ${PRISMA_PRIMARY_HOVER};
+    box-shadow: 0 6px 20px rgba(0, 116, 212, 0.45);
   }
 `;
 
@@ -1040,7 +1038,7 @@ const FAQAnswer = styled.div`
 `;
 
 const Footer = styled.footer`
-  background: #0f0a1e;
+  background: #121212;
   color: rgba(255, 255, 255, 0.9);
   padding: 3rem 0 0;
 `;
@@ -1068,7 +1066,7 @@ const FooterBrand = styled.div`
     font-weight: 800;
     font-style: italic;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+    background: ${PRISMA_PRIMARY};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1113,7 +1111,7 @@ const FooterLinks = styled.ul`
   }
 
   a:hover {
-    color: #a78bfa;
+    color: #0074d4;
   }
 `;
 

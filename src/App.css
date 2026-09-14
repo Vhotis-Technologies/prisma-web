@@ -6,7 +6,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  color: #1a1a1a;
+  color: #212121;
   overflow-x: hidden;
 }
 
@@ -38,21 +38,21 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #faf5ff;
+  background: #e6f3fb;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c4b5fd;
+  background: #0074d4;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a78bfa;
+  background: #005fad;
 }
 
 /* Button focus styles */
 button:focus {
-  outline: 2px solid #7c3aed;
+  outline: 2px solid #0074d4;
   outline-offset: 2px;
 }
 

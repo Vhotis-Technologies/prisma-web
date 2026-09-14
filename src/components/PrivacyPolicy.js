@@ -11,10 +11,10 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #6d28d9 100%);
+  background: #0074d4;
   padding: 1.5rem 0 2.5rem;
   margin-bottom: -1.5rem;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 116, 212, 0.25);
 `;
 
 const HeaderContent = styled.div`
@@ -102,7 +102,7 @@ const Card = styled(motion.div)`
   background: white;
   border-radius: 16px;
   padding: 2.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 10px 40px -10px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 10px 40px -10px rgba(0, 116, 212, 0.12);
   border: 1px solid rgba(0, 0, 0, 0.04);
   margin-bottom: 2rem;
 
@@ -124,7 +124,7 @@ const Spinner = styled(motion.div)`
   width: 40px;
   height: 40px;
   border: 3px solid #e2e8f0;
-  border-top-color: #6366f1;
+  border-top-color: #0074d4;
   border-radius: 50%;
 `;
 
@@ -153,7 +153,7 @@ const ErrorText = styled.p`
 `;
 
 const RetryButton = styled(motion.button)`
-  background: #6366f1;
+  background: #0074d4;
   color: white;
   border: none;
   padding: 0.65rem 1.25rem;
@@ -164,7 +164,7 @@ const RetryButton = styled(motion.button)`
   transition: background 0.2s ease;
 
   &:hover {
-    background: #4f46e5;
+    background: #005fad;
   }
 `;
 
@@ -220,7 +220,7 @@ const PrivacyContent = styled.div`
   }
 
   a {
-    color: #6366f1;
+    color: #0074d4;
     text-decoration: none;
     font-weight: 500;
     border-bottom: 1px solid transparent;
@@ -228,8 +228,8 @@ const PrivacyContent = styled.div`
   }
 
   a:hover {
-    color: #4f46e5;
-    border-bottom-color: #4f46e5;
+    color: #005fad;
+    border-bottom-color: #005fad;
   }
 `;
 

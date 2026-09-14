@@ -77,11 +77,11 @@ const DemoButton = styled(motion.button)`
   transition: all 0.2s ease;
 
   &.primary {
-    background: #8b5cf6;
+    background: #0074d4;
     color: white;
 
     &:hover {
-      background: #7c3aed;
+      background: #005fad;
     }
   }
 

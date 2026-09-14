@@ -9,12 +9,12 @@ import {
 } from "../utils/cookieUtils";
 import { initAnalytics, disableAnalytics } from "../lib/firebase";
 
-const PRISMA_PRIMARY = "#7c3aed";
-const PRISMA_PRIMARY_LIGHT = "#8b5cf6";
-const PRISMA_PRIMARY_PALE = "#ede9fe";
-const PRISMA_GRADIENT = "linear-gradient(135deg, #667eea, #764ba2)";
-const TEXT_DARK = "#1a1a1a";
-const TEXT_MUTED = "#6b7280";
+// Matches prisma_web / prisma_client primary blues
+const PRISMA_PRIMARY = "#0074d4";
+const PRISMA_PRIMARY_HOVER = "#005fad";
+const PRISMA_PRIMARY_SOFT = "#e6f3fb";
+const TEXT_DARK = "#212121";
+const TEXT_MUTED = "#424242";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -42,18 +42,18 @@ const SettingsCard = styled(motion.div)`
   flex-direction: column;
   background: #fff;
   border-radius: 20px;
-  border: 1px solid ${PRISMA_PRIMARY_PALE};
-  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.2);
+  border: 1px solid ${PRISMA_PRIMARY_SOFT};
+  box-shadow: 0 24px 60px rgba(0, 116, 212, 0.16);
 `;
 
 const AccentBar = styled.div`
   height: 4px;
-  background: ${PRISMA_GRADIENT};
+  background: ${PRISMA_PRIMARY};
 `;
 
 const SettingsHeader = styled.div`
   padding: 1.5rem 1.5rem 1.1rem;
-  border-bottom: 1px solid #f3f0ff;
+  border-bottom: 1px solid #e5e5e5;
 
   h2 {
     margin: 0 0 0.4rem;
@@ -93,7 +93,7 @@ const CategoryRow = styled.div`
   justify-content: space-between;
   gap: 1rem;
   padding: 1.15rem 0;
-  border-bottom: 1px solid #f3f0ff;
+  border-bottom: 1px solid #e5e5e5;
 
   &:last-child {
     border-bottom: none;
@@ -115,7 +115,7 @@ const CategoryIcon = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: ${PRISMA_PRIMARY_PALE};
+  background: ${PRISMA_PRIMARY_SOFT};
   color: ${PRISMA_PRIMARY};
   font-size: 0.9rem;
 `;
@@ -142,7 +142,7 @@ const AlwaysOn = styled.span`
   gap: 0.35rem;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
-  background: ${PRISMA_PRIMARY_PALE};
+  background: ${PRISMA_PRIMARY_SOFT};
   color: ${PRISMA_PRIMARY};
   font-size: 0.75rem;
   font-weight: 700;
@@ -186,7 +186,7 @@ const Toggle = styled.label`
   }
 
   input:checked + .slider {
-    background: ${PRISMA_PRIMARY_LIGHT};
+    background: ${PRISMA_PRIMARY};
   }
 
   input:checked + .slider:before {
@@ -196,7 +196,7 @@ const Toggle = styled.label`
 
 const SettingsFooter = styled.div`
   padding: 1.15rem 1.5rem 1.5rem;
-  border-top: 1px solid #f3f0ff;
+  border-top: 1px solid #e5e5e5;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -215,11 +215,11 @@ const PrimaryButton = styled(motion.button)`
   font-weight: 600;
   font-size: 0.95rem;
   color: #fff;
-  background: ${PRISMA_GRADIENT};
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  background: ${PRISMA_PRIMARY};
+  box-shadow: 0 4px 14px rgba(0, 116, 212, 0.28);
 
   &:hover {
-    filter: brightness(1.06);
+    background: ${PRISMA_PRIMARY_HOVER};
   }
 `;
 
@@ -232,7 +232,7 @@ const OutlineButton = styled(motion.button)`
   font-size: 0.95rem;
   color: ${TEXT_DARK};
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e5e5e5;
 
   &:hover {
     background: #fafafa;

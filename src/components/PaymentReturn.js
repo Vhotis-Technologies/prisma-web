@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #e6f3fb 0%, #ffffff 100%);
   padding: 2rem;
 `;
 
@@ -33,7 +33,7 @@ const Icon = styled.div`
     color: #f44336;
   }
   .loading {
-    color: #2196f3;
+    color: #0074d4;
   }
 `;
 
@@ -68,11 +68,11 @@ const Button = styled(motion.button)`
 `;
 
 const SecondaryButton = styled(Button)`
-  background: #e3f2fd;
+  background: #e6f3fb;
   color: #1a1a1a;
 
   &:hover {
-    background: #bbdefb;
+    background: #d6ebf8;
   }
 `;
 
