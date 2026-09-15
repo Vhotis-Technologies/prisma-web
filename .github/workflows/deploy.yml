@@ -37,7 +37,7 @@ jobs:
 
             sleep 10
             docker compose build
-            docker-compose --env-file .env up -d --build
+            docker compose --env-file .env up -d --build
 
             docker system prune -f
 
@@ -76,7 +76,7 @@ jobs:
             docker container prune -f || true
 
             sleep 10
-            docker-compose --env-file .env.staging -f docker-compose-staging.yml up -d --build
+            docker compose --env-file .env.staging -f docker-compose-staging.yml up -d --build
 
             docker system prune -f
 
