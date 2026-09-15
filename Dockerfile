@@ -9,7 +9,7 @@ COPY . .
 ARG REACT_APP_CLIENT_WEB_URL=https://staging.app.prismavalet.com
 ENV REACT_APP_CLIENT_WEB_URL=$REACT_APP_CLIENT_WEB_URL
 
-ARG REACT_APP_API_BASE_URL=https://staging.app.prismavalet.com/client
+ARG REACT_APP_API_BASE_URL=https://staging.client.prismavalet.com
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 ARG REACT_APP_FIREBASE_API_KEY

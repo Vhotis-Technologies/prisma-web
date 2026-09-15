@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaCookie, FaExclamationCircle } from "react-icons/fa";
 import CookieSettings from "./CookieSettings";
+import { API_BASE_URL } from "../config";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -248,15 +249,10 @@ const PrivacyPolicy = () => {
       setLoading(true);
       setError(false);
 
-      const base = process.env.REACT_APP_API_BASE_URL || "http://localhost/client";
-      const apiUrl = `${base.replace(/\/$/, "")}/api/v1/terms/get_privacy_policy/`;
+      const apiUrl = `${API_BASE_URL}/api/v1/terms/get_privacy_policy/`;
 
-      const response = await fetch(apiUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // No Content-Type on GET — keeps this a simple request (no CORS preflight).
+      const response = await fetch(apiUrl, { method: "GET" });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

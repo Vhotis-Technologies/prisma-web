@@ -23,7 +23,6 @@ import CookieConsent, {
   OPEN_COOKIE_SETTINGS_EVENT,
 } from "./components/CookieConsent";
 import CookieDemo from "./components/CookieDemo";
-import ContactSupportModal from "./components/ContactSupportModal";
 import { loginUrl, welcomeUrl } from "./config";
 import { hasConsentForCategory } from "./utils/cookieUtils";
 import { initAnalytics } from "./lib/firebase";
@@ -814,18 +813,13 @@ const MobileSubtitle = styled.p`
   margin-bottom: 1rem;
 `;
 
-const PhoneNumber = styled.button`
+const PhoneNumber = styled.a`
   font-size: 1.5rem;
   font-weight: 700;
   color: ${PRISMA_PRIMARY};
   text-decoration: none;
   margin-bottom: 2rem;
   display: block;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
 
   &:hover {
     text-decoration: underline;
@@ -988,7 +982,6 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState("home");
   const [activePackage, setActivePackage] = useState("basic");
   const [expandedFAQ, setExpandedFAQ] = useState(null);
-  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     // Simple routing based on URL path
@@ -1106,7 +1099,7 @@ function App() {
     {
       question: "What if I have more questions?",
       answer:
-        "Please feel free to contact us via Contact support in the footer — we’ll get back to you by email.",
+        "Please feel free to contact us via Phone at +353 899 765 197 or by email at support@prismavalet.com.",
     },
   ];
 
@@ -1720,8 +1713,8 @@ function App() {
                 <PrimaryButton href={welcomeUrl}>Get started</PrimaryButton>
                 <SecondaryButton href={loginUrl}>Log in</SecondaryButton>
               </CTAButtons>
-              <PhoneNumber type="button" onClick={() => setShowContactModal(true)}>
-                Contact support
+              <PhoneNumber href="mailto:support@prismavalet.com">
+                support@prismavalet.com
               </PhoneNumber>
             </motion.div>
           </MobileSchedulingContent>
@@ -1797,13 +1790,7 @@ function App() {
             <FooterHeading>Support</FooterHeading>
             <FooterLinks>
               <li>
-                <a
-                  href="#contact-support"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowContactModal(true);
-                  }}
-                >
+                <a href="mailto:support@prismavalet.com?subject=Support">
                   Contact support
                 </a>
               </li>
@@ -1815,11 +1802,6 @@ function App() {
           <p className="powered">Powered by @vhotis technology</p>
         </FooterBottom>
       </Footer>
-
-      <ContactSupportModal
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
 
       {/* Cookie Consent Banner */}
       <CookieConsent />
