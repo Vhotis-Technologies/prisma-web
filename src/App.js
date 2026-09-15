@@ -355,77 +355,118 @@ const SectionTitle = styled.h2`
   margin-bottom: 3rem;
 `;
 
+const PackageTabsWrap = styled.div`
+  position: relative;
+  margin: 0 auto 2.5rem;
+  max-width: 920px;
+`;
+
 const PackageTabs = styled.div`
   display: flex;
-  margin-bottom: 2rem;
-  background: ${PRISMA_PRIMARY_SOFT};
-  border-radius: 25px;
-  padding: 4px;
+  align-items: stretch;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 116, 212, 0.12);
+  border-radius: 999px;
+  box-shadow:
+    0 1px 2px rgba(0, 116, 212, 0.04),
+    0 12px 32px -16px rgba(0, 116, 212, 0.18);
+  backdrop-filter: blur(10px);
   overflow-x: auto;
-  gap: 2px;
-  white-space: nowrap;
+  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  position: relative;
+  -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 100%;
-    background: linear-gradient(to right, ${PRISMA_PRIMARY_SOFT}, transparent);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 100%;
-    background: linear-gradient(to left, ${PRISMA_PRIMARY_SOFT}, transparent);
-    pointer-events: none;
-    z-index: 1;
-  }
-
   @media (max-width: 768px) {
-    padding: 2px;
-    border-radius: 20px;
+    justify-content: flex-start;
+    border-radius: 22px;
+    padding: 0.35rem;
+    gap: 0.25rem;
   }
 `;
 
 const TabButton = styled.button`
-  background: ${(props) => (props.active ? "white" : "transparent")};
-  color: ${(props) => (props.active ? PRISMA_PRIMARY : TEXT_MUTED)};
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 7.5rem;
+  padding: 0.7rem 1.1rem;
   border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 20px;
-  font-weight: 600;
+  border-radius: 999px;
+  background: transparent;
+  color: ${(props) => (props.$active ? "#ffffff" : TEXT_MUTED)};
   cursor: pointer;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  min-width: 80px;
+  scroll-snap-align: center;
+  transition: color 0.25s ease;
   white-space: nowrap;
-  box-shadow: ${(props) => (props.active ? "0 2px 8px rgba(0, 116, 212, 0.2)" : "none")};
+  outline: none;
+
+  &:hover {
+    color: ${(props) => (props.$active ? "#ffffff" : PRISMA_PRIMARY)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${PRISMA_PRIMARY};
+    outline-offset: 2px;
+  }
 
   @media (max-width: 768px) {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    min-width: 70px;
+    flex: 0 0 auto;
+    min-width: 6.75rem;
+    padding: 0.65rem 1rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
-    min-width: 60px;
+    min-width: 6.25rem;
+    padding: 0.55rem 0.85rem;
+  }
+`;
+
+const TabActivePill = styled(motion.div)`
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, ${PRISMA_PRIMARY} 0%, ${PRISMA_PRIMARY_HOVER} 100%);
+  box-shadow:
+    0 4px 14px rgba(0, 116, 212, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  z-index: -1;
+`;
+
+const TabLabel = styled.span`
+  position: relative;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+
+  @media (max-width: 480px) {
+    font-size: 0.78rem;
+  }
+`;
+
+const TabMeta = styled.span`
+  position: relative;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: ${(props) => (props.$active ? 0.85 : 0.55)};
+  transition: opacity 0.25s ease;
+
+  @media (max-width: 480px) {
+    font-size: 0.62rem;
   }
 `;
 
@@ -1106,6 +1147,7 @@ function App() {
   const packages = {
     basic: {
       title: "Prisma Quick Sparkle",
+      shortLabel: "Quick Sparkle",
       description:
         "Essential cleaning for routine maintenance. Perfect for regular upkeep.",
       image: cleaning,
@@ -1123,6 +1165,7 @@ function App() {
     },
     mini: {
       title: "Prisma Refresh",
+      shortLabel: "Refresh",
       description:
         "Enhanced cleaning with protective treatments. Great for monthly maintenance.",
       image: tireCleaning,
@@ -1148,6 +1191,7 @@ function App() {
     },
     interior: {
       title: "Prisma Interior Sanctuary",
+      shortLabel: "Interior",
       description:
         "Deep interior cleaning and restoration. Perfect for addressing stains and odors.",
       image: interiorCleaning,
@@ -1166,6 +1210,7 @@ function App() {
     },
     full: {
       title: "Prisma Showroom Shine",
+      shortLabel: "Showroom",
       badge: "Most Popular",
       description:
         "Comprehensive inside-out detailing. Complete vehicle restoration.",
@@ -1196,6 +1241,7 @@ function App() {
     },
     premium: {
       title: "Prisma Ultimate Prestige",
+      shortLabel: "Prestige",
       badge: "VIP",
       description:
         "Ultimate detailing experience with advanced treatments and protection.",
@@ -1462,38 +1508,36 @@ function App() {
         <Container>
           <SectionTitle>Detail Packages</SectionTitle>
 
-          <PackageTabs>
-            <TabButton
-              active={activePackage === "basic"}
-              onClick={() => setActivePackage("basic")}
-            >
-              Prisma Quick Sparkle
-            </TabButton>
-            <TabButton
-              active={activePackage === "mini"}
-              onClick={() => setActivePackage("mini")}
-            >
-              Prisma Refresh
-            </TabButton>
-            <TabButton
-              active={activePackage === "interior"}
-              onClick={() => setActivePackage("interior")}
-            >
-              Prisma Interior Sanctuary
-            </TabButton>
-            <TabButton
-              active={activePackage === "full"}
-              onClick={() => setActivePackage("full")}
-            >
-              Prisma Showroom Shine
-            </TabButton>
-            <TabButton
-              active={activePackage === "premium"}
-              onClick={() => setActivePackage("premium")}
-            >
-              Prisma Ultimate Prestige
-            </TabButton>
-          </PackageTabs>
+          <PackageTabsWrap>
+            <PackageTabs role="tablist" aria-label="Detail packages">
+              {Object.entries(packages).map(([key, pkg]) => {
+                const isActive = activePackage === key;
+                return (
+                  <TabButton
+                    key={key}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    $active={isActive}
+                    onClick={() => setActivePackage(key)}
+                  >
+                    {isActive && (
+                      <TabActivePill
+                        layoutId="package-tab-pill"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                        }}
+                      />
+                    )}
+                    <TabLabel>{pkg.shortLabel}</TabLabel>
+                    <TabMeta $active={isActive}>{pkg.price}</TabMeta>
+                  </TabButton>
+                );
+              })}
+            </PackageTabs>
+          </PackageTabsWrap>
 
           <PackageCard
             initial={{ opacity: 0, y: 50 }}
@@ -1756,7 +1800,7 @@ function App() {
           <FooterBrand>
             <div className="footer-logo">Prisma Car Care</div>
             <p className="footer-tagline">
-              Premium mobile detailing at your place or ours. Book on the web or in the app—simple, flexible, five-star service.
+              Premium mobile detailing at your your convenience.
             </p>
           </FooterBrand>
           <FooterColumn>
@@ -1798,8 +1842,8 @@ function App() {
           </FooterColumn>
         </FooterGrid>
         <FooterBottom>
-          <p className="copyright">&copy; 2026 Prisma Car Care. All rights reserved.</p>
-          <p className="powered">Powered by @vhotis technology</p>
+          <p className="copyright">&copy; {new Date().getFullYear()} Prisma Car Care. All rights reserved.</p>
+          <p className="powered">Powered by @vhotis technologies limited</p>
         </FooterBottom>
       </Footer>
 
