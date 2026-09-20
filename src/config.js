@@ -2,13 +2,13 @@
 const DEFAULT_WEB =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5173"
-    : "https://staging.app.prismavalet.com";
+    : "https://app.prismavalet.com";
 
 /** Django client API base (no trailing slash). Prefer dedicated client host over /client on app. */
 const DEFAULT_API =
   process.env.NODE_ENV === "development"
     ? "http://localhost/client"
-    : "https://staging.client.prismavalet.com";
+    : "https://client.prismavalet.com";
 
 export const CLIENT_WEB_URL = (
   process.env.REACT_APP_CLIENT_WEB_URL || DEFAULT_WEB
