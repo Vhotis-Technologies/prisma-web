@@ -90,8 +90,8 @@ const HeaderCta = styled.a`
   background: ${PRISMA_PRIMARY};
   color: white;
   text-decoration: none;
-  padding: 0.6rem 1.15rem;
-  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
   font-weight: 600;
   box-shadow: 0 4px 14px rgba(0, 116, 212, 0.35);
 
@@ -1153,12 +1153,10 @@ function App() {
       image: cleaning,
       interior: [],
       exterior: [
-        "Exterior Wash and Dry (Hand Wash, Steam wash)",
-        "Clean Wheels, Tires, and  Arches",
+        "Full exterior valeting (Hand Wash, Steam wash)",
+        "Wheels, Tires, and Arches cleaned and dressed",
         "Exterior Windows Cleaned",
-        "Interior Windows Cleaned",
         "Quick Interior Vacuum",
-        "Boot and Trunk Vacuumed",
       ],
       duration: "45-60 minutes",
       price: "€50",
@@ -1171,23 +1169,20 @@ function App() {
       image: tireCleaning,
       interior: [
         "Everything in the Quick Sparkle",
-        "Deep Carpet & Upholstery Cleaning",
-        "Leather Cleaning & Conditioning",
-        "Dashboard & Console Wipe Down",
-        "Trunk & Door Jambs Cleaned",
-        "Interior Glass Polish",
-        "Interior Protection Application",
+        "Comsole and Dashboard cleaned and vinly coated",
+        "Leather seats cleaned and treated (if applicable)",
+        "Interior glass cleaned and hydrophobic coated",
       ],
       exterior: [
-        "Exterior Wash and Dry (Hand Wash, Steam wash)",
-        "Clean Wheels, Tires, and  Arches",
-        "Exterior Windows Cleaned",
-        "Door sills and Lamps Cleaned",
-        "Sealant or Wax Application",
-        "Signature hot air drying"
+        "Wheels, Tires, and Arches cleaned and dressed",
+        "Exterior windows cleaned and hydrophobic coated",
+        "Door sills and lamps cleaned",
+        "Signature hot air drying",
+        "Full body wax or sealant application",
+        "Tar and Gravel removal",
       ],
-      duration: "3 hours",
-      price: "€100",
+      duration: "2-3 hours",
+      price: "€130",
     },
     interior: {
       title: "Prisma Interior Sanctuary",
@@ -1196,16 +1191,16 @@ function App() {
         "Deep interior cleaning and restoration. Perfect for addressing stains and odors.",
       image: interiorCleaning,
       interior: [
-        "Deep Carpet & Upholstery Cleaning",
-        "Upholstery Steam Cleaning",
-        "Leather Cleaning & Conditioning",
-        "Dashboard Deep Clean",
+        "Deep Carpet & Upholstery Vacuumed and shampooed",
+        "Leather Cleaning & Conditioning (if applicable)",
+        "Dashboard cleaned and vinly coated",
+        "Interior glass cleaned and hydrophobic coated",
+        "Trunk & Door Jambs cleaned and treated",
+        "Door sills and lamps cleaned",
+        "Mats vacuumed and shampooed",
         "Odor Elimination Treatment",
-        "Interior Protection Application",
-        "Trunk & Door Jambs Detail",
       ],
-      exterior: [""],
-      duration: "3 hours",
+      duration: "2-3 hours",
       price: "€150",
     },
     full: {
@@ -1216,31 +1211,22 @@ function App() {
         "Comprehensive inside-out detailing. Complete vehicle restoration.",
       image: heroImage,
       interior: [
-        "Everything in Prisma Refresh",
-        "Deep Carpet & Upholstery Cleaning",
-        "Leather Cleaning & Conditioning",
-        "Dashboard & Console Wipe Down",
-        "Trunk & Door Jambs Cleaned",
-        "Interior Glass Polish",
-        "Interior Protection Application",
+        "Everything in Prisma Interior Sanctuary",
+        "Interior walls washed and treated",
       ],
       exterior: [
         "Everything in Prisma Refresh",
-        "Hand Wash & Clay Bar Treatment",
+        "Clay Bar Treatment",
         "One stage paint correction",
-        "Wheel & Tire Deep Clean",
-        "Tire Dressing",
-        "Exterior Glass Polishing",
         "Trim & Plastic Restoration",
-        "Tar and Gravel Removal",
-        "Sealant or Wax Application",
-        "Signature hot air drying"
+        "Tar and Iron Removal",
+        "Signature hot air drying",
       ],
-      duration: "5 hours",
+      duration: "4-5 hours",
       price: "€250",
     },
     premium: {
-      title: "Prisma Ultimate Prestige",
+      title: "Prisma Prestige",
       shortLabel: "Prestige",
       badge: "VIP",
       description:
@@ -1249,26 +1235,34 @@ function App() {
       interior: [
         "Everything in Prisma Showroom Shine",
         "Advanced Stain Removal",
-        "Professional Carpet Extraction",
-        "Leather Cleaning & Conditioning",
-        "Dashboard & Console Wipe Down",
-        "Trunk & Door Jambs Cleaned",
-        "Interior Glass Polishing",
-        "Interior Protection Application",
+        "Advanced Odor Elimination Treatment",
+        "Pet Hair Removal",
       ],
       exterior: [
         "Everything in Prisma Showroom Shine",
-        "Hand Wash & Clay Bar Treatment",
-        "Two stage paint correction",
-        "Wheel & Tire Deep Clean",
-        "Tire Dressing",
-        "Exterior Glass Polishing",
-        "Trim & Plastic Restoration",
-        "Tar and Gravel Removal",
-        "Sealant or Wax Application",
-        "Signature hot air drying"
+        "Engine bay cleaned",
+        "Polishing of paintwork",
+        "Wax application",
       ],
-      duration: "6 hours",
+      duration: "5-6 hours",
+      price: "€400",
+    },
+    ceramic: {
+      title: "Prisma Ceramic Guard",
+      shortLabel: "Ceramic Guard",
+      badge: "Ceramic Guard",
+      description:
+        "Ceramic coating for your vehicle to protect it from the elements and keep it looking new.",
+      image: carPolishing,
+      interior: ["Everything in Prisma Refresh"],
+      exterior: [
+        "Tar and Iron Removal",
+        "Clay Bar Treatment",
+        "Polishing of paintwork",
+        "Two stage paint correction (if applicable)",
+        "Advanced Ceramic Coating Application (12-18 months)",
+      ],
+      duration: "5-6 hours",
       price: "€500",
     },
   };
