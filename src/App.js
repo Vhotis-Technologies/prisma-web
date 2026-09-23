@@ -1164,6 +1164,7 @@ function App() {
     mini: {
       title: "Prisma Refresh",
       shortLabel: "Refresh",
+      badge: "Most Popular",
       description:
         "Enhanced cleaning with protective treatments. Great for monthly maintenance.",
       image: tireCleaning,
@@ -1200,13 +1201,14 @@ function App() {
         "Mats vacuumed and shampooed",
         "Odor Elimination Treatment",
       ],
+      exterior: [],
       duration: "2-3 hours",
       price: "€150",
     },
     full: {
       title: "Prisma Showroom Shine",
       shortLabel: "Showroom",
-      badge: "Most Popular",
+      badge: "Best Value",
       description:
         "Comprehensive inside-out detailing. Complete vehicle restoration.",
       image: heroImage,
@@ -1565,25 +1567,29 @@ function App() {
               <PackagePrice>{packages[activePackage].price}</PackagePrice>
             </PackageInfo>
 
-            <ServiceList>
-              <ServiceCategory>INTERIOR</ServiceCategory>
-              {packages[activePackage].interior.map((service, index) => (
-                <ServiceItem key={index}>
-                  <FaCheck style={{ color: PRISMA_PRIMARY }} />
-                  {service}
-                </ServiceItem>
-              ))}
-            </ServiceList>
+            {(packages[activePackage].interior || []).length > 0 && (
+              <ServiceList>
+                <ServiceCategory>INTERIOR</ServiceCategory>
+                {packages[activePackage].interior.map((service, index) => (
+                  <ServiceItem key={index}>
+                    <FaCheck style={{ color: PRISMA_PRIMARY }} />
+                    {service}
+                  </ServiceItem>
+                ))}
+              </ServiceList>
+            )}
 
-            <ServiceList>
-              <ServiceCategory>EXTERIOR</ServiceCategory>
-              {packages[activePackage].exterior.map((service, index) => (
-                <ServiceItem key={index}>
-                  <FaCheck style={{ color: PRISMA_PRIMARY }} />
-                  {service}
-                </ServiceItem>
-              ))}
-            </ServiceList>
+            {(packages[activePackage].exterior || []).length > 0 && (
+              <ServiceList>
+                <ServiceCategory>EXTERIOR</ServiceCategory>
+                {packages[activePackage].exterior.map((service, index) => (
+                  <ServiceItem key={index}>
+                    <FaCheck style={{ color: PRISMA_PRIMARY }} />
+                    {service}
+                  </ServiceItem>
+                ))}
+              </ServiceList>
+            )}
           </PackageCard>
         </Container>
       </PackagesSection>
