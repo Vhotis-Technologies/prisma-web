@@ -1192,7 +1192,7 @@ function App() {
         "Deep interior cleaning and restoration. Perfect for addressing stains and odors.",
       image: interiorCleaning,
       interior: [
-        "Deep Carpet & Upholstery Vacuumed and shampooed",
+        "Carpet & Upholstery Vacuumed and shampooed",
         "Leather Cleaning & Conditioning (if applicable)",
         "Dashboard cleaned and vinly coated",
         "Interior glass cleaned and hydrophobic coated",
