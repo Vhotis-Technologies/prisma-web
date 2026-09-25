@@ -7,7 +7,6 @@ import {
   FaClock,
   FaShieldAlt,
   FaStar,
-  FaDownload,
   FaCheck,
   FaChevronDown,
   FaHandshake,
@@ -221,7 +220,7 @@ const PrimaryButton = styled(motion.a)`
   color: white;
   border: none;
   padding: 1rem 2rem;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -244,9 +243,9 @@ const PrimaryButton = styled(motion.a)`
 const SecondaryButton = styled(motion.a)`
   background: ${PRISMA_PRIMARY_SOFT};
   color: ${PRISMA_PRIMARY};
-  border: 2px solid ${PRISMA_PRIMARY};
+  border: 1px solid ${PRISMA_PRIMARY};
   padding: 1rem 2rem;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -835,12 +834,6 @@ const MobileSchedulingContent = styled.div`
   margin: 0 auto;
 `;
 
-const MobileIcon = styled.div`
-  font-size: 3rem;
-  color: #1a1a1a;
-  margin-bottom: 1rem;
-`;
-
 const MobileTitle = styled.h2`
   font-size: 2rem;
   font-weight: 700;
@@ -1170,7 +1163,7 @@ function App() {
       image: tireCleaning,
       interior: [
         "Everything in the Quick Sparkle",
-        "Comsole and Dashboard cleaned and vinly coated",
+        "Console and Dashboard cleaned and vinly coated",
         "Leather seats cleaned and treated (if applicable)",
         "Interior glass cleaned and hydrophobic coated",
       ],
@@ -1440,7 +1433,7 @@ function App() {
                 </ProblemIcon>
                 <ProblemTitle>Fleet & Partnership</ProblemTitle>
                 <ProblemDescription>
-                  One platform for fleet owners, branches, and partners. Manage multiple vehicles, branches, and subscriptions with fleet maintenance insights, partner programs, and dedicated support—all in one place.
+                  One platform for fleet owners, branches, and partners. Manage multiple vehicles, branches, and subscriptions with fleet maintenance insights, partner programs, and dedicated support. All in one place.
                 </ProblemDescription>
               </ProblemCard>
             </ProblemsGrid>
@@ -1460,7 +1453,7 @@ function App() {
             >
               <FleetTitle>Fleet & Partnership Programs</FleetTitle>
               <FleetSubtitle>
-                Whether you run a corporate fleet, multiple branches, or partner with us—get one platform that scales. Flexible subscriptions, fleet maintenance reporting, and clear documentation so your team and partners stay aligned.
+                Whether you run a corporate fleet, multiple branches, or partner with us, get one platform that scales. Flexible subscriptions, fleet maintenance reporting, and clear documentation so your team stays organised and ahead.
               </FleetSubtitle>
               <FleetGrid>
                 <FleetCard
@@ -1491,7 +1484,7 @@ function App() {
                 >
                   <FleetCardIcon><FaCogs /></FleetCardIcon>
                   <FleetCardTitle>Flexibility</FleetCardTitle>
-                  <FleetCardText>At-home or at-shop, multiple packages, and scheduling that works around your operations.</FleetCardText>
+                  <FleetCardText>At-home or a place of business, multiple packages, and scheduling that works around your operations.</FleetCardText>
                 </FleetCard>
               </FleetGrid>
             </motion.div>
@@ -1641,7 +1634,7 @@ function App() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                Book in seconds from the app, choose your location and time, and get premium mobile detailing with full flexibility—at home, office, or our shop.
+                Book in seconds from the app, choose your location and time, and get premium mobile detailing with full flexibility whenever you need it
               </motion.p>
             </MobileContent>
             <MobileImage>
@@ -1678,7 +1671,7 @@ function App() {
                 viewport={{ once: true }}
               >
                 From spotless interiors to mirror-finish exteriors, we restore
-                your ride to NEW with our expert five-star service.
+                your ride with our expert five-star service.
               </motion.p>
             </TransformText>
             <TransformImage>
@@ -1717,7 +1710,7 @@ function App() {
             >
               <LicensedTitle>Licensed, Insured & Ready to Scale</LicensedTitle>
               <LicensedText>
-                With years in the business, Prisma Car Care delivers a trusted, flexible detailing experience—for individuals, fleets, and partners. We take care of every detail with premium service and clear documentation. At your place or our shop, we're ready to make your car, boat, or RV look brand new. Get in touch or download the app to book today.
+                With years in the business, Prisma Car Care delivers a trusted, flexible detailing experience for individuals, fleets, and partners. We take care of every detail with premium service and clear documentation
               </LicensedText>
             </motion.div>
           </LicensedContent>
@@ -1736,7 +1729,7 @@ function App() {
             >
               <MobileTitle>Simple Booking, Maximum Flexibility</MobileTitle>
               <MobileSubtitle>
-                Book on the web or download the app to schedule anytime, reschedule when needed, and get the same premium service whether you're one car or a full fleet.
+                Book on the web or download the app to schedule anytime, reschedule when needed, and get the same premium service whether you manage a fleet or own a few vehicles.
               </MobileSubtitle>
             </motion.div>
 
@@ -1746,9 +1739,6 @@ function App() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <MobileIcon>
-                <FaDownload />
-              </MobileIcon>
               <MobileTitle>Get started on the web or in the app</MobileTitle>
               <MobileSubtitle>
                 Create an account, book as a guest, or email us if you have questions.
