@@ -220,7 +220,7 @@ const PrimaryButton = styled(motion.a)`
   color: white;
   border: none;
   padding: 1rem 2rem;
-  border-radius: 20px;
+  border-radius: 40px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -243,9 +243,8 @@ const PrimaryButton = styled(motion.a)`
 const SecondaryButton = styled(motion.a)`
   background: ${PRISMA_PRIMARY_SOFT};
   color: ${PRISMA_PRIMARY};
-  border: 1px solid ${PRISMA_PRIMARY};
   padding: 1rem 2rem;
-  border-radius: 20px;
+  border-radius: 40px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
