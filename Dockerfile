@@ -1,5 +1,5 @@
 # Multi-stage build for smaller production image
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -36,7 +36,7 @@ ENV REACT_APP_FIREBASE_MEASUREMENT_ID=$REACT_APP_FIREBASE_MEASUREMENT_ID
 RUN npm run build
 
 # Production stage - much smaller
-FROM node:18-alpine AS production
+FROM node:22-alpine AS production
 
 WORKDIR /app
 RUN npm install -g serve

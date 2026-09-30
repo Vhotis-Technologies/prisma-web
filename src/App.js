@@ -50,7 +50,12 @@ const TEXT_MUTED = "#424242";
 
 // Modern Hero Section – Prisma aesthetic
 const HeroSection = styled.section`
-  background: linear-gradient(180deg, ${PRISMA_PRIMARY_SOFT} 0%, #ffffff 50%, #e6f3fb 100%);
+  background: linear-gradient(
+    180deg,
+    ${PRISMA_PRIMARY_SOFT} 0%,
+    #ffffff 50%,
+    #e6f3fb 100%
+  );
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -167,7 +172,7 @@ const ValueItem = styled(motion.div)`
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0, 116, 212, 0.08);
   font-size: 0.95rem;
@@ -435,7 +440,11 @@ const TabActivePill = styled(motion.div)`
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, ${PRISMA_PRIMARY} 0%, ${PRISMA_PRIMARY_HOVER} 100%);
+  background: linear-gradient(
+    135deg,
+    ${PRISMA_PRIMARY} 0%,
+    ${PRISMA_PRIMARY_HOVER} 100%
+  );
   box-shadow:
     0 4px 14px rgba(0, 116, 212, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -711,7 +720,12 @@ const TransformImage = styled.div`
 // Fleet & Partnership Section
 const FleetSection = styled.section`
   padding: 5rem 0;
-  background: linear-gradient(180deg, #ffffff 0%, ${PRISMA_PRIMARY_SOFT} 50%, #ffffff 100%);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    ${PRISMA_PRIMARY_SOFT} 50%,
+    #ffffff 100%
+  );
   color: ${TEXT_DARK};
 `;
 
@@ -1151,7 +1165,7 @@ function App() {
         "Quick Interior Vacuum",
       ],
       duration: "45-60 minutes",
-      price: "€50",
+      price: "€50 | €45",
     },
     mini: {
       title: "Prisma Refresh",
@@ -1175,7 +1189,7 @@ function App() {
         "Tar and Gravel removal",
       ],
       duration: "2-3 hours",
-      price: "€130",
+      price: "€130 | €120",
     },
     interior: {
       title: "Prisma Interior Sanctuary",
@@ -1195,7 +1209,7 @@ function App() {
       ],
       exterior: [],
       duration: "2-3 hours",
-      price: "€150",
+      price: "€150 | €140",
     },
     full: {
       title: "Prisma Showroom Shine",
@@ -1217,7 +1231,7 @@ function App() {
         "Signature hot air drying",
       ],
       duration: "4-5 hours",
-      price: "€250",
+      price: "€250 | €230",
     },
     premium: {
       title: "Prisma Prestige",
@@ -1239,7 +1253,7 @@ function App() {
         "Wax application",
       ],
       duration: "5-6 hours",
-      price: "€400",
+      price: "€400 | €360",
     },
     ceramic: {
       title: "Prisma Ceramic Guard",
@@ -1257,7 +1271,7 @@ function App() {
         "Advanced Ceramic Coating Application (12-18 months)",
       ],
       duration: "5-6 hours",
-      price: "€500",
+      price: "€500 | €450",
     },
   };
 
@@ -1284,16 +1298,30 @@ function App() {
                 Get Your Services Delivered To You Anywhere At Your Convenience
               </HeroSubtitle>
               <HeroTagline>
-                Premium mobile detailing with flexible scheduling and fleet &amp; partnership programs, so you can book in seconds and keep every vehicle at its best.
+                Premium mobile detailing with flexible scheduling and fleet
+                &amp; partnership programs, so you can book in seconds and keep
+                every vehicle at its best.
               </HeroTagline>
               <ValueStrip>
-                <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                <ValueItem
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
                   <FaHandshake /> Fleet & Partnership
                 </ValueItem>
-                <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                <ValueItem
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
                   <FaMobile /> Ease of Use
                 </ValueItem>
-                <ValueItem initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                <ValueItem
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
                   <FaCogs /> Flexibility
                 </ValueItem>
               </ValueStrip>
@@ -1347,7 +1375,9 @@ function App() {
             >
               <ProblemsTitle>Built for Scale & Simplicity</ProblemsTitle>
               <ProblemsSubtitle>
-                From individual drivers to fleets and partners—we deliver ease of use, flexibility, and premium service with clear documentation at every step.
+                From individual drivers to fleets and partners—we deliver ease
+                of use, flexibility, and premium service with clear
+                documentation at every step.
               </ProblemsSubtitle>
             </motion.div>
 
@@ -1417,7 +1447,10 @@ function App() {
                 </ProblemIcon>
                 <ProblemTitle>Technology & Ease of Use</ProblemTitle>
                 <ProblemDescription>
-                  Our integrated platform makes booking and managing services simple: seamless app booking, real-time tracking, and transparent pricing—so you spend less time organising and more time on the road.
+                  Our integrated platform makes booking and managing services
+                  simple: seamless app booking, real-time tracking, and
+                  transparent pricing—so you spend less time organising and more
+                  time on the road.
                 </ProblemDescription>
               </ProblemCard>
 
@@ -1432,7 +1465,10 @@ function App() {
                 </ProblemIcon>
                 <ProblemTitle>Fleet & Partnership</ProblemTitle>
                 <ProblemDescription>
-                  One platform for fleet owners, branches, and partners. Manage multiple vehicles, branches, and subscriptions with fleet maintenance insights, partner programs, and dedicated support. All in one place.
+                  One platform for fleet owners, branches, and partners. Manage
+                  multiple vehicles, branches, and subscriptions with fleet
+                  maintenance insights, partner programs, and dedicated support.
+                  All in one place.
                 </ProblemDescription>
               </ProblemCard>
             </ProblemsGrid>
@@ -1452,7 +1488,10 @@ function App() {
             >
               <FleetTitle>Fleet & Partnership Programs</FleetTitle>
               <FleetSubtitle>
-                Whether you run a corporate fleet, multiple branches, or partner with us, get one platform that scales. Flexible subscriptions, fleet maintenance reporting, and clear documentation so your team stays organised and ahead.
+                Whether you run a corporate fleet, multiple branches, or partner
+                with us, get one platform that scales. Flexible subscriptions,
+                fleet maintenance reporting, and clear documentation so your
+                team stays organised and ahead.
               </FleetSubtitle>
               <FleetGrid>
                 <FleetCard
@@ -1461,9 +1500,14 @@ function App() {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <FleetCardIcon><FaCar /></FleetCardIcon>
+                  <FleetCardIcon>
+                    <FaCar />
+                  </FleetCardIcon>
                   <FleetCardTitle>Fleet Management</FleetCardTitle>
-                  <FleetCardText>Manage vehicles across branches, track subscriptions, and keep fleet maintenance data in one place.</FleetCardText>
+                  <FleetCardText>
+                    Manage vehicles across branches, track subscriptions, and
+                    keep fleet maintenance data in one place.
+                  </FleetCardText>
                 </FleetCard>
                 <FleetCard
                   initial={{ opacity: 0, y: 30 }}
@@ -1471,9 +1515,14 @@ function App() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   viewport={{ once: true }}
                 >
-                  <FleetCardIcon><FaHandshake /></FleetCardIcon>
+                  <FleetCardIcon>
+                    <FaHandshake />
+                  </FleetCardIcon>
                   <FleetCardTitle>Partnerships</FleetCardTitle>
-                  <FleetCardText>Partner programs and referral benefits with straightforward terms and support when you need it.</FleetCardText>
+                  <FleetCardText>
+                    Partner programs and referral benefits with straightforward
+                    terms and support when you need it.
+                  </FleetCardText>
                 </FleetCard>
                 <FleetCard
                   initial={{ opacity: 0, y: 30 }}
@@ -1481,9 +1530,14 @@ function App() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   viewport={{ once: true }}
                 >
-                  <FleetCardIcon><FaCogs /></FleetCardIcon>
+                  <FleetCardIcon>
+                    <FaCogs />
+                  </FleetCardIcon>
                   <FleetCardTitle>Flexibility</FleetCardTitle>
-                  <FleetCardText>At-home or a place of business, multiple packages, and scheduling that works around your operations.</FleetCardText>
+                  <FleetCardText>
+                    At-home or a place of business, multiple packages, and
+                    scheduling that works around your operations.
+                  </FleetCardText>
                 </FleetCard>
               </FleetGrid>
             </motion.div>
@@ -1633,7 +1687,9 @@ function App() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                Book in seconds from the app, choose your location and time, and get premium mobile detailing with full flexibility whenever you need it
+                Book in seconds from the app, choose your location and time, and
+                get premium mobile detailing with full flexibility whenever you
+                need it
               </motion.p>
             </MobileContent>
             <MobileImage>
@@ -1709,7 +1765,10 @@ function App() {
             >
               <LicensedTitle>Licensed, Insured & Ready to Scale</LicensedTitle>
               <LicensedText>
-                With years in the business, Prisma Car Care delivers a trusted, flexible detailing experience for individuals, fleets, and partners. We take care of every detail with premium service and clear documentation
+                With years in the business, Prisma Car Care delivers a trusted,
+                flexible detailing experience for individuals, fleets, and
+                partners. We take care of every detail with premium service and
+                clear documentation
               </LicensedText>
             </motion.div>
           </LicensedContent>
@@ -1728,7 +1787,9 @@ function App() {
             >
               <MobileTitle>Simple Booking, Maximum Flexibility</MobileTitle>
               <MobileSubtitle>
-                Book on the web or download the app to schedule anytime, reschedule when needed, and get the same premium service whether you manage a fleet or own a few vehicles.
+                Book on the web or download the app to schedule anytime,
+                reschedule when needed, and get the same premium service whether
+                you manage a fleet or own a few vehicles.
               </MobileSubtitle>
             </motion.div>
 
@@ -1740,7 +1801,8 @@ function App() {
             >
               <MobileTitle>Get started on the web or in the app</MobileTitle>
               <MobileSubtitle>
-                Create an account, book as a guest, or email us if you have questions.
+                Create an account, book as a guest, or email us if you have
+                questions.
               </MobileSubtitle>
               <CTAButtons style={{ marginTop: "1.25rem" }}>
                 <PrimaryButton href={welcomeUrl}>Get started</PrimaryButton>
@@ -1795,23 +1857,29 @@ function App() {
           <FooterColumn>
             <FooterHeading>Account</FooterHeading>
             <FooterLinks>
-              <li><a href={welcomeUrl}>Get started</a></li>
-              <li><a href={loginUrl}>Log in</a></li>
+              <li>
+                <a href={welcomeUrl}>Get started</a>
+              </li>
+              <li>
+                <a href={loginUrl}>Log in</a>
+              </li>
             </FooterLinks>
           </FooterColumn>
           <FooterColumn>
             <FooterHeading>Legal</FooterHeading>
             <FooterLinks>
-              <li><a href="/terms-of-service">Terms of Service</a></li>
-              <li><a href="/privacy-policy">Privacy Policy</a></li>
+              <li>
+                <a href="/terms-of-service">Terms of Service</a>
+              </li>
+              <li>
+                <a href="/privacy-policy">Privacy Policy</a>
+              </li>
               <li>
                 <a
                   href="#cookie-settings"
                   onClick={(e) => {
                     e.preventDefault();
-                    window.dispatchEvent(
-                      new Event(OPEN_COOKIE_SETTINGS_EVENT)
-                    );
+                    window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS_EVENT));
                   }}
                 >
                   Cookie Preferences
@@ -1831,7 +1899,10 @@ function App() {
           </FooterColumn>
         </FooterGrid>
         <FooterBottom>
-          <p className="copyright">&copy; {new Date().getFullYear()} Prisma Car Care. All rights reserved.</p>
+          <p className="copyright">
+            &copy; {new Date().getFullYear()} Prisma Car Care. All rights
+            reserved.
+          </p>
           <p className="powered">Powered by @vhotis technologies limited</p>
         </FooterBottom>
       </Footer>
