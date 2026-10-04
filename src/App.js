@@ -23,6 +23,7 @@ import CookieConsent, {
 } from "./components/CookieConsent";
 import CookieDemo from "./components/CookieDemo";
 import { loginUrl, welcomeUrl } from "./config";
+import { withReferral } from "./lib/referral";
 import { hasConsentForCategory } from "./utils/cookieUtils";
 import { initAnalytics } from "./lib/firebase";
 
@@ -1055,6 +1056,10 @@ function App() {
     }
   }, []);
 
+  // Partner links use /?ref=CODE. Keep that code on every jump to the booking app.
+  const loginHref = withReferral(loginUrl);
+  const welcomeHref = withReferral(welcomeUrl);
+
   // Route rendering — CookieConsent stays mounted on every page
   if (currentRoute === "payment-return") {
     return (
@@ -1283,8 +1288,8 @@ function App() {
           <Header>
             <Logo>PRISMA CAR CARE</Logo>
             <HeaderNav>
-              <HeaderLink href={loginUrl}>Log in</HeaderLink>
-              <HeaderCta href={welcomeUrl}>Get started</HeaderCta>
+              <HeaderLink href={loginHref}>Log in</HeaderLink>
+              <HeaderCta href={welcomeHref}>Get started</HeaderCta>
             </HeaderNav>
           </Header>
           <HeroContent>
@@ -1339,7 +1344,7 @@ function App() {
 
             <CTAButtons>
               <PrimaryButton
-                href={welcomeUrl}
+                href={welcomeHref}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
@@ -1349,7 +1354,7 @@ function App() {
                 Get started
               </PrimaryButton>
               <SecondaryButton
-                href={loginUrl}
+                href={loginHref}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -1805,8 +1810,8 @@ function App() {
                 questions.
               </MobileSubtitle>
               <CTAButtons style={{ marginTop: "1.25rem" }}>
-                <PrimaryButton href={welcomeUrl}>Get started</PrimaryButton>
-                <SecondaryButton href={loginUrl}>Log in</SecondaryButton>
+                <PrimaryButton href={welcomeHref}>Get started</PrimaryButton>
+                <SecondaryButton href={loginHref}>Log in</SecondaryButton>
               </CTAButtons>
               <PhoneNumber href="mailto:support@prismavalet.com">
                 support@prismavalet.com
@@ -1858,10 +1863,10 @@ function App() {
             <FooterHeading>Account</FooterHeading>
             <FooterLinks>
               <li>
-                <a href={welcomeUrl}>Get started</a>
+                <a href={welcomeHref}>Get started</a>
               </li>
               <li>
-                <a href={loginUrl}>Log in</a>
+                <a href={loginHref}>Log in</a>
               </li>
             </FooterLinks>
           </FooterColumn>
