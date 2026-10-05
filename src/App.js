@@ -42,7 +42,7 @@ const EXTRA_KEYS = ["full", "premium", "ceramic"];
 
 const packages = {
   basic: {
-    title: "Prisma Quick Sparkle",
+    title: "Quick Sparkle",
     description: "A proper wash and a quick interior tidy.",
     points: [
       "Hand wash and steam wash",
@@ -51,10 +51,10 @@ const packages = {
       "Quick interior vacuum",
     ],
     duration: "45–60 minutes",
-    price: "€40 sedans, +20% for SUVs",
+    price: "€50",
   },
   mini: {
-    title: "Prisma Refresh",
+    title: "Refresh",
     badge: "Most popular",
     description: "A fuller clean with wax and interior protection.",
     points: [
@@ -71,10 +71,10 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "2–3 hours",
-    price: "€100 sedans, +20% for SUVs",
+    price: "€130",
   },
   full: {
-    title: "Prisma Showroom Shine",
+    title: "Showroom Shine",
     badge: "Best value",
     description:
       "Everything in Refresh, plus a full interior clean, finished with a clay bar, hand wax, and a one-stage paint correction.",
@@ -86,10 +86,10 @@ const packages = {
       "One-stage paint correction",
     ],
     duration: "4–5 hours",
-    price: "€250 sedans, +20% for SUVs",
+    price: "€250",
   },
   interior: {
-    title: "Prisma Interior Sanctuary",
+    title: "Interior Sanctuary",
     description:
       "Our most comprehensive interior valet, designed to refresh, deep clean and restore the interior of your vehicle.",
     points: [
@@ -108,10 +108,10 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "2–3 hours",
-    price: "€150 sedans, +20% for SUVs",
+    price: "€150",
   },
   premium: {
-    title: "Prisma Prestige",
+    title: "Prestige",
     badge: "VIP",
     description: "The full detail, plus engine bay and paint polishing.",
     points: [
@@ -124,21 +124,20 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "5–6 hours",
-    price: "€400 sedans, +20% for SUVs",
+    price: "€400",
   },
   ceramic: {
-    title: "Prisma Ceramic Guard",
+    title: "Ceramic Guard",
     badge: "Protection",
     description: "Paint correction and a ceramic coat that lasts 12–18 months.",
     points: [
-      "Everything in PrismaRefresh",
       "Tar and iron removal",
       "Clay bar and polish",
       "Two-stage correction, if needed",
       "Ceramic coating",
     ],
     duration: "5–6 hours",
-    price: "€500 sedans, +20% for SUVs",
+    price: "€500",
   },
 };
 
@@ -348,7 +347,11 @@ const GhostButton = styled.a`
 
 const Hero = styled.section`
   background:
-    radial-gradient(ellipse 55% 70% at 100% 0%, rgba(26, 120, 216, 0.28), transparent 55%),
+    radial-gradient(
+      ellipse 55% 70% at 100% 0%,
+      rgba(26, 120, 216, 0.28),
+      transparent 55%
+    ),
     linear-gradient(165deg, ${PRISMA_NAVY} 0%, ${PRISMA_DEEP} 62%, #040c16 100%);
   color: #fff;
   padding: 4.25rem 0 3.25rem;
@@ -376,7 +379,8 @@ const Eyebrow = styled.p`
   letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-bottom: 1rem;
-  color: ${(props) => props.$onDark ? "rgba(255,255,255,0.82)" : PRISMA_PRIMARY};
+  color: ${(props) =>
+    props.$onDark ? "rgba(255,255,255,0.82)" : PRISMA_PRIMARY};
 `;
 
 const HeroTitle = styled.h1`
@@ -808,7 +812,10 @@ const FooterGrid = styled.div`
   margin: 0 auto;
   padding: 0 24px 2.5rem;
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(
+      0,
+      1fr
+    );
   gap: 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 
@@ -998,7 +1005,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
             >
-              <Eyebrow $onDark>Mobile car care · Dublin</Eyebrow>
+              <Eyebrow $onDark>Mobile car care</Eyebrow>
               <HeroTitle>
                 Small changes
                 <span>Big difference</span>
@@ -1060,8 +1067,8 @@ function App() {
               </IconBadge>
               <h3>Simple booking</h3>
               <p>
-                Start as a guest or with an account. Pick the package, then
-                move or cancel from the same place.
+                Start as a guest or with an account. Pick the package, then move
+                or cancel from the same place.
               </p>
             </FeatureCard>
             <FeatureCard>
@@ -1070,8 +1077,8 @@ function App() {
               </IconBadge>
               <h3>Fleets and partners</h3>
               <p>
-                Several vehicles, branches, or a partner introduction all sit
-                on the same account.
+                Several vehicles, branches, or a partner introduction all sit on
+                the same account.
               </p>
             </FeatureCard>
           </FeatureGrid>
@@ -1154,7 +1161,9 @@ function App() {
             <Step>
               <StepNumber>02</StepNumber>
               <h3>Pick a time and place</h3>
-              <p>Home, work, or wherever the car is parked in greater Dublin.</p>
+              <p>
+                Home, work, or wherever the car is parked in greater Dublin.
+              </p>
             </Step>
             <Step>
               <StepNumber>03</StepNumber>
@@ -1218,7 +1227,9 @@ function App() {
         <FooterGrid>
           <FooterBrand>
             <div className="name">Prisma Car Care</div>
-            <p>Small changes. Big difference. Mobile detailing across Dublin.</p>
+            <p>
+              Small changes. Big difference. Mobile detailing across Dublin.
+            </p>
           </FooterBrand>
           <div>
             <FooterHeading>Account</FooterHeading>
@@ -1257,7 +1268,9 @@ function App() {
             <FooterHeading>Support</FooterHeading>
             <FooterLinks>
               <li>
-                <a href="mailto:support@prismavalet.com">support@prismavalet.com</a>
+                <a href="mailto:support@prismavalet.com">
+                  support@prismavalet.com
+                </a>
               </li>
               <li>
                 <a href="tel:+353899765197">+353 899 765 197</a>
@@ -1266,7 +1279,9 @@ function App() {
           </div>
         </FooterGrid>
         <FooterBottom>
-          <p>© {new Date().getFullYear()} Prisma Car Care. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Prisma Car Care. All rights reserved.
+          </p>
           <p>Powered by @vhotis technologies limited</p>
         </FooterBottom>
       </Footer>
