@@ -55,7 +55,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "1.5 hour",
-    price: "€80 sedans, +10% for SUVs"
+    price: "€80 sedans, +10% for SUVs",
   },
   mini: {
     title: "Prisma Refresh",
@@ -71,7 +71,6 @@ const packages = {
       "Boot, and carpet vacuumed",
       "Wax or sealant applied",
       "Leather cleaned and conditioned",
-      "Tar removal",
       "Final detailing and inspection",
     ],
     duration: "3 hours",
