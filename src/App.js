@@ -55,7 +55,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "1.5 hour",
-    price: "€80 sedans, +10% for SUVs",
+    price: "€80 sedans",
   },
   mini: {
     title: "Prisma Refresh",
@@ -74,7 +74,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "3 hours",
-    price: "€110 sedans, +10% for SUVs",
+    price: "€110 sedans",
   },
   full: {
     title: "Prisma Showroom Shine",
@@ -89,7 +89,7 @@ const packages = {
       "One-stage paint correction and polish",
     ],
     duration: "6 hours",
-    price: "€350 sedans, +10% for SUVs",
+    price: "€350 sedans",
   },
   interior: {
     title: "Prisma Interior Sanctuary",
@@ -113,7 +113,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "3.5 hours",
-    price: "€140 sedans, +10% for SUVs",
+    price: "€140 sedans",
   },
 };
 
