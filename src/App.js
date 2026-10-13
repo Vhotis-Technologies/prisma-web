@@ -37,8 +37,8 @@ const PRISMA_SOFT = "#e7f0f8";
 const TEXT_DARK = "#212121";
 const TEXT_MUTED = "#424242";
 
-const FEATURED_KEYS = ["basic", "mini", "interior"];
-const EXTRA_KEYS = ["full", "premium", "ceramic"];
+const FEATURED_KEYS = ["basic", "mini"];
+const EXTRA_KEYS = ["interior", "full", "premium", "ceramic"];
 
 const packages = {
   basic: {
@@ -544,7 +544,7 @@ const TextButton = styled.button`
 
 const PackageGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
 
   @media (max-width: 900px) {
@@ -890,9 +890,9 @@ function App() {
 
   const loginHref = withReferral(loginUrl);
   const welcomeHref = withReferral(welcomeUrl);
-  const visibleKeys = showAllPackages
-    ? [...FEATURED_KEYS, ...EXTRA_KEYS]
-    : FEATURED_KEYS;
+  const visibleKeys = (
+    showAllPackages ? [...FEATURED_KEYS, ...EXTRA_KEYS] : FEATURED_KEYS
+  ).filter((key) => packages[key]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -1085,15 +1085,15 @@ function App() {
               <Eyebrow>Packages</Eyebrow>
               <SectionTitle>Simple, clear pricing</SectionTitle>
               <SectionLead>
-                Start with a wash, a fuller refresh, or a deep interior. Open
-                the rest for showroom, prestige, or ceramic protection.
+                Start with a wash or a fuller refresh. Open the rest for a deep
+                interior, showroom, prestige, or ceramic protection.
               </SectionLead>
             </div>
             <TextButton
               type="button"
               onClick={() => setShowAllPackages((open) => !open)}
             >
-              {showAllPackages ? "Show the main three" : "See all packages"}
+              {showAllPackages ? "Show fewer packages" : "See all packages"}
             </TextButton>
           </PackageHead>
           <PackageGrid>
