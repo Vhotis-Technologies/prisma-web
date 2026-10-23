@@ -47,15 +47,15 @@ const packages = {
     points: [
       "Full exterior wash",
       "Exterior glass cleaned",
+      "Interior glass quick wipe",
       "Tyres dressed",
       "Dashboard wiped down",
-      "Quick interior hoover including the boot",
+      "Interior hoover including the boot",
       "Door pockets emptied and wiped",
-      "Interior glass quick wipe",
       "Final detailing and inspection",
     ],
-    duration: "1.5 hour",
-    price: "€80 sedans",
+    duration: "2 hours",
+    price: "€80",
   },
   mini: {
     title: "Prisma Refresh",
@@ -74,7 +74,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "3 hours",
-    price: "€110 sedans",
+    price: "€120",
   },
   full: {
     title: "Prisma Showroom Shine",
@@ -89,7 +89,7 @@ const packages = {
       "One-stage paint correction and polish",
     ],
     duration: "6 hours",
-    price: "€350 sedans",
+    price: "€350",
   },
   interior: {
     title: "Prisma Interior Sanctuary",
@@ -113,7 +113,7 @@ const packages = {
       "Final detailing and inspection",
     ],
     duration: "3.5 hours",
-    price: "€140 sedans",
+    price: "€140",
   },
 };
 
