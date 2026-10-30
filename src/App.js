@@ -41,6 +41,23 @@ const FEATURED_KEYS = ["basic", "mini"];
 const EXTRA_KEYS = ["interior", "full", "premium", "ceramic"];
 
 const packages = {
+  exterior: {
+    title: "Prisma Exterior Shine",
+    description: "Complete exterior shine",
+    points: [
+      "Full exterior hand wash",
+      "Glass cleaned inside and out",
+      "Wheel arches cleaned and dressed",
+      "Tyres dressed",
+      "Door sills and ledges wiped",
+      "Hot-air drying",
+      "Before and after images",
+      "Vehicle condition report",
+      "Final detailing and inspection",
+    ],
+    duration: "1 hour",
+    price: "€50",
+  },
   basic: {
     title: "Prisma Quick Sparkle",
     description: "Outside wash and interior clean.",
