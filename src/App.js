@@ -49,7 +49,6 @@ const packages = {
       "Glass cleaned inside and out",
       "Wheel arches cleaned and dressed",
       "Tyres dressed",
-      "Door sills and ledges wiped",
       "Hot-air drying",
       "Before and after images",
       "Vehicle condition report",
