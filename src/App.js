@@ -37,8 +37,8 @@ const PRISMA_SOFT = "#e7f0f8";
 const TEXT_DARK = "#212121";
 const TEXT_MUTED = "#424242";
 
-const FEATURED_KEYS = ["basic", "mini"];
-const EXTRA_KEYS = ["interior", "full", "premium", "ceramic"];
+const FEATURED_KEYS = ["exterior", "mini"];
+const EXTRA_KEYS = ["interior", "full", "premium"];
 
 const packages = {
   exterior: {
@@ -58,7 +58,7 @@ const packages = {
     duration: "1 hour",
     price: "€50",
   },
-  basic: {
+  mini: {
     title: "Prisma Quick Sparkle",
     description: "Outside wash and interior clean.",
     points: [
@@ -74,7 +74,7 @@ const packages = {
     duration: "2 hours",
     price: "€80",
   },
-  mini: {
+  full: {
     title: "Prisma Refresh",
     badge: "Most popular",
     description: "That wash, plus a proper interior clean.",
@@ -93,7 +93,7 @@ const packages = {
     duration: "3 hours",
     price: "€120",
   },
-  full: {
+  premium: {
     title: "Prisma Showroom Shine",
     badge: "Best value",
     description:
